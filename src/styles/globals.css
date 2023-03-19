@@ -1,3 +1,134 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&display=swap');
+
+body {
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 400;
+  font-size: 20px;
+}
+
+:root {
+  /* --bg-main-dark: #181D31; */
+  --bg-main-dark: #061515;
+  --bg-secondary-dark: #040505;
+  --bg-tertiary-dark: #1e2626;
+  --text-main-dark: #e3d1e6;
+  --text-secondary-dark: #a56baf;
+
+  --bg-main-light: #d9f6f5;
+  --text-main-light: #58335e;
+
+}
+
+.bg-main-dark {
+  background: var(--bg-main-dark)
+}
+
+.bg-main-light {
+  background: var(--bg-main-light)
+}
+
+.bg-secondary-dark {
+  background: var(--bg-secondary-dark)
+}
+
+.bg-tertiary-dark {
+  background: var(--bg-tertiary-dark)
+}
+
+.text-main-dark {
+  color: var(--text-main-dark)
+}
+
+.text-secondary-dark {
+  color: var(--text-secondary-dark)
+}
+
+.text-main-light {
+  color: var(--text-main-light)
+}
+
+.button {
+  position: relative;
+  cursor: pointer;
+  transition: 0.4s cubic-bezier(0.25, 0, 0, 1);
+  z-index: 2;
+  overflow: hidden;
+  /* width: fit-content; */
+}
+
+.button-primary {
+  background-color: #d9f6f5;
+  color: #58335e
+}
+
+.button-secondary {
+  background-color: #061515;
+  color: #e3d1e6
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+@layer base {
+  h1 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: clamp(28px, 4.2vw, 40px);
+    font-weight: 900;
+  }
+
+  h2 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: clamp(20px, 3.2vw, 32px);
+    font-weight: 500;
+  }
+
+  ul {
+    list-style-type: circle;
+    margin-left: 1.5em
+  }
+
+  ol {
+    list-style: decimal outside;
+    margin-left: 1.5em
+  }
+
+  blockquote {
+    background: #1e2626;
+    border-left: 10px solid #e3d1e6;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C" "\201D" "\2018" "\2019";
+  }
+
+  blockquote:before {
+    color: #e3d1e6;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+
+  blockquote p {
+    display: inline;
+  }
+
+  code {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: #1e2626;
+    line-height: 1rem;
+    border-left: 10px solid #e3d1e6;
+  }
+}
+
+.title {
+  font-size: clamp(42px, 4.2vw, 56px);
+  font-weight: 800;
+}
