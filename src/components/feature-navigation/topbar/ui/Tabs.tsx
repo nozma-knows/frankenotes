@@ -13,21 +13,23 @@ interface TabsProps {
 export default function Tabs({ tabs }: TabsProps) {
   const router = useRouter();
 
-  const pathRoute = () => `/${router.pathname.split("/")[1]}`;
-
+  const currentPath = `${router.pathname}`;
   return (
     <div className="flex gap-4">
-      {tabs.map(({ label, link }) => (
-        <Link
-          className={`${
-            link === pathRoute() && "text-[#a56baf]"
-          } text-lg font-semibold button hidden md:flex`}
-          key={label}
-          href={link}
-        >
-          {label}
-        </Link>
-      ))}
+      {tabs.map(({ label, link }) => {
+        const onPath = link === currentPath; // True if tab corresponds to current path
+        return (
+          <Link
+            className={`${
+              onPath && "text-[#a56baf]"
+            } text-lg font-semibold button hidden md:flex`}
+            key={label}
+            href={link}
+          >
+            {label}
+          </Link>
+        );
+      })}
     </div>
   );
 }
