@@ -5,7 +5,7 @@ const title = "Frankenotes";
 const tabs = [
   {
     label: "About",
-    link: "about",
+    link: "/about",
   },
   {
     label: "Login",
