@@ -1,6 +1,6 @@
 // import { useState, useEffect } from "react";
 import useWindowSize from "@/components/utils/hooks/useWindowSize";
-import Topbar from "@/components/feature-navigation/Topbar";
+import Topbar from "@/components/feature-navigation/topbar";
 
 interface PageProps {
   hideTopbar?: boolean;
