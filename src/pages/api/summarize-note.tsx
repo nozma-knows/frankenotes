@@ -34,21 +34,17 @@ export default async function handler(
         },
       });
     }
-    console.log("HERE: ");
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 200,
       chunkOverlap: 10,
     });
-    console.log("HERE 2: ");
     const docs = await splitter.createDocuments([note]);
-    console.log("docs: ", docs);
     const llm = new OpenAI();
     const chain = loadSummarizationChain(llm);
 
     const response = await chain.call({
       input_documents: docs,
     });
-    console.log("response: ", response);
     res.status(200).json({
       message: response.text,
       error: null,

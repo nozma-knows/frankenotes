@@ -171,7 +171,7 @@ const SummaryView = ({
       {loading ? (
         <PulseLoader color="#e3d1e6" size={8} className="py-7 px-4" />
       ) : (
-        <div className="p-4">{summary}</div>
+        <div className="p-4 overflow-auto">{summary}</div>
       )}
     </div>
   );
