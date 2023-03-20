@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { LexicalEditor, NodeKey } from "lexical";
 import { $getRoot, $isParagraphNode } from "lexical";
 import { $isCodeNode, CODE_LANGUAGE_MAP } from "@lexical/code";
@@ -30,6 +31,7 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import { useCallback, useEffect, useState } from "react";
+import FrankenotesAltLogo from "@/icons/alt-logo.svg";
 
 import useModal from "@/components/utils/hooks/useModal";
 import { getSelectedNode } from "./utils";
@@ -330,7 +332,13 @@ export default function ToolbarPlugin({
     <div className="flex w-full px-2 py-2 justify-between items-center rounded-t-xl h-16 bg-main-light overflow-hidden">
       <div className="flex gap-2 items-center">
         {(!fileManagerOpen || size === "sm") && (
-          <div className="text-4xl	font-bold text-main-light px-[18px]">F</div>
+          // <div className="text-4xl	font-bold text-main-light px-[18px]">F</div>
+          <Image
+            src={FrankenotesAltLogo}
+            alt="Frankenotes Logo"
+            width={40}
+            className="mx-2"
+          />
         )}
         {size === "lg" && (
           <>

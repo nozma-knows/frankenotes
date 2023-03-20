@@ -10,6 +10,10 @@ import FileManager from "@/components/feature-notepad/file-manager";
 import useWindowSize, {
   smScreenMax,
 } from "@/components/utils/hooks/useWindowSize";
+import Logo from "@/components/ui/icons/Logo";
+import FrankenotesLogo from "@/icons/logo.svg";
+
+const title = `Frankenotes`;
 
 export async function getServerSideProps(context: Context) {
   const { token } = parse(context.req.headers.cookie);
@@ -19,11 +23,11 @@ export async function getServerSideProps(context: Context) {
   return { redirect: { destination: "/" } };
 }
 
-const Logo = ({ size }: { size: { width: number; height: number } }) => {
+const AppLogo = ({ size }: { size: { width: number; height: number } }) => {
   return (
     <div className="flex justify-center p-2 pb-4">
       {size.width >= smScreenMax && (
-        <div className="text-4xl font-bold">Frankenotes</div>
+        <Logo Icon={FrankenotesLogo} text={title} />
       )}
     </div>
   );
@@ -58,7 +62,7 @@ export default function Notepad({ token }: { token: string }) {
           {fileManagerOpen && (
             <div className="flex w-full h-1/3 sm:h-full order-last sm:order-none sm:max-w-[15rem] md:max-w-xs 2xl:max-w-sm">
               <div className="flex w-full flex-col">
-                {size.width >= smScreenMax && <Logo size={size} />}
+                {size.width >= smScreenMax && <AppLogo size={size} />}
                 <FileManager
                   files={data.notes}
                   authorId={authorId}

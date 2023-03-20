@@ -34,7 +34,7 @@ export default async function handler(
 ) {
   try {
     const { notes, query } = req.body;
-
+    console.log("notes, query: ", { notes, query });
     // If notes are missing, return error
     if (!notes) {
       res.status(400).json({
