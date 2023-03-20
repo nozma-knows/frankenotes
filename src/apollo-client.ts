@@ -1,18 +1,15 @@
-// import { ApolloClient, InMemoryCache } from "@apollo/client";
-
-// const client = new ApolloClient({
-//   uri: `${process.env.NEXT_PUBLIC_BACKEND_URI}/api`,
-//   cache: new InMemoryCache(),
-// });
-
-// export default client;
-
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { useCookies } from "react-cookie";
+
+console.log(
+  "process.env.NEXT_PUBLIC_BACKEND_URI: ",
+  `${process.env.NEXT_PUBLIC_BACKEND_URI}/api`
+);
+
+const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/api`;
 
 const httpLink = createHttpLink({
-  uri: `${process.env.NEXT_PUBLIC_BACKEND_URI}/api`,
+  uri,
 });
 
 const sessionLink = setContext((request, { headers }) => {
