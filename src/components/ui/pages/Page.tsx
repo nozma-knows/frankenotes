@@ -14,11 +14,11 @@ export default function Page({ hideTopbar = false, children }: PageProps) {
 
   return (
     <div
-      className="flex flex-col"
+      className="flex flex-col bg-main-dark text-main-dark w-full min-w-0"
       style={{ width: screenWidth, height: screenHeight }}
     >
       {!hideTopbar && <Topbar />}
-      <div className="flex w-full h-full bg-green-900">{children}</div>
+      <div className="flex w-full h-full">{children}</div>
     </div>
   );
 }

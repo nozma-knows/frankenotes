@@ -17,10 +17,10 @@ const tabs = (token?: string) => {
     ];
   }
   return [
-    {
-      label: "About",
-      link: "/about",
-    },
+    // {
+    //   label: "About",
+    //   link: "/about",
+    // },
     {
       label: "Login",
       link: "/auth/login",
