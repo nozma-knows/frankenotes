@@ -100,7 +100,7 @@ const DetailsView = ({
     UpdateNote({
       updatedTitle: title,
     });
-  }, [UpdateNote, title]);
+  }, [UpdateNote, activeFile, setActiveFile, title]);
 
   return (
     <div className="flex flex-1 w-full flex-col gap-2 bg-tertiary-dark rounded-lg pt-1 pb-2 px-2">
@@ -114,6 +114,10 @@ const DetailsView = ({
             value={title}
             placeholder="Untitled"
             onChange={(e) => setTitle(e.target.value)}
+            onBlur={() =>
+              activeFile?.title !== title &&
+              setActiveFile({ ...activeFile, title: title })
+            }
           />
           <div className="flex gap-2 text-xl text-main-dark">
             <div className="font-bold">
@@ -281,15 +285,15 @@ export default function DetailsPlugin({
     }
   }, [activeFile, noteId, summary]);
 
-  useEffect(() => {
-    if (noteId) {
-      handleSummarizeNote({
-        note: activeFile!,
-        setSummary,
-        setSummaryLoading,
-      });
-    }
-  }, [activeFile, noteId]);
+  // useEffect(() => {
+  //   if (noteId) {
+  //     handleSummarizeNote({
+  //       note: activeFile!,
+  //       setSummary,
+  //       setSummaryLoading,
+  //     });
+  //   }
+  // }, [activeFile, noteId]);
 
   return (
     <div className="flex w-full h-32 gap-2 px-2">

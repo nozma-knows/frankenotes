@@ -18,16 +18,6 @@ interface GenerateNextApiRequest extends NextApiRequest {
     query: string;
   };
 }
-
-// Initalize the wrapper
-// const model = new OpenAI({
-//   openAIApiKey: process.env.OPENAI_API_KEY,
-//   temperature: 0.9,
-// });
-
-// const memory = new BufferMemory();
-// const chain = new ConversationChain({ llm: model, memory: memory });
-
 export default async function handler(
   req: GenerateNextApiRequest,
   res: NextApiResponse<ResponseData>
