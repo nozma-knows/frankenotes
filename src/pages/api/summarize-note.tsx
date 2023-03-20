@@ -39,7 +39,7 @@ export default async function handler(
       chunkOverlap: 10,
     });
     const docs = await splitter.createDocuments([note]);
-    const llm = new OpenAI();
+    const llm = new OpenAI({ maxTokens: 32 });
     const chain = loadSummarizationChain(llm);
 
     const response = await chain.call({
