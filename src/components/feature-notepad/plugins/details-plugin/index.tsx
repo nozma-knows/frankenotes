@@ -225,19 +225,27 @@ const handleSummarizeNote = async ({
   setSummaryLoading: (summaryLoading: boolean) => void;
 }) => {
   try {
-    if (note && note.content) {
-      const response = await fetch(`../api/summarize-note`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          note: note.content,
-        }),
-      });
-      const data = await response.json();
-      setSummary(data.message);
-      setSummaryLoading(false);
+    if (note) {
+      if (note.content) {
+        setSummaryLoading(true);
+        const response = await fetch(`../api/summarize-note`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            note: note.content,
+          }),
+        });
+        const data = await response.json();
+        setSummary(data.message);
+        setSummaryLoading(false);
+      } else {
+        setSummary(
+          `Whenever you open a document that's not empty, this section will summarize your note!`
+        );
+        setSummaryLoading(false);
+      }
     }
   } catch (error) {
     console.error("Error submitting prompt: ", error);
@@ -264,14 +272,17 @@ export default function DetailsPlugin({
   const [summaryLoading, setSummaryLoading] = useState(false);
 
   useEffect(() => {
+    if (!activeFile && summary !== "") {
+      setSummary("");
+    }
     if (activeFile && noteId !== activeFile.id) {
       setNoteId(activeFile.id);
+    } else {
     }
-  }, [activeFile, noteId]);
+  }, [activeFile, noteId, summary]);
 
   useEffect(() => {
     if (noteId) {
-      setSummaryLoading(true);
       handleSummarizeNote({
         note: activeFile!,
         setSummary,
