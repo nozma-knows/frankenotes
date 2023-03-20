@@ -9,6 +9,7 @@ import {
 } from "../spech-to-text";
 import { BsMic, BsChevronUp, BsPlus, BsChevronRight } from "react-icons/bs";
 import { TbPrompt } from "react-icons/tb";
+import { PulseLoader } from "react-spinners";
 import { Note } from "@/__generated__/graphql";
 import ToolbarButton from "../toolbar-plugin/ui/buttons/ToolbarButton";
 import {
@@ -102,7 +103,7 @@ const DetailsView = ({
   }, [UpdateNote, title]);
 
   return (
-    <div className="flex w-full flex-col gap-2 bg-tertiary-dark rounded-lg pt-1 pb-2 px-2">
+    <div className="flex flex-1 w-full flex-col gap-2 bg-tertiary-dark rounded-lg pt-1 pb-2 px-2">
       {activeFile && (
         <div className="flex flex-col h-full justify-between">
           <input
@@ -158,10 +159,20 @@ const DetailsView = ({
   );
 };
 
-const SummaryView = () => {
+const SummaryView = ({
+  summary,
+  loading,
+}: {
+  summary: string;
+  loading: boolean;
+}) => {
   return (
-    <div className="flex w-full flex-col gap-2 bg-tertiary-dark text-main-dark rounded-lg pt-1 pb-2 px-2">
-      <div>Summary View</div>
+    <div className="flex flex-1 w-full bg-tertiary-dark rounded-lg">
+      {loading ? (
+        <PulseLoader color="#e3d1e6" size={8} className="py-7 px-4" />
+      ) : (
+        <div className="p-4">{summary}</div>
+      )}
     </div>
   );
 };
@@ -204,6 +215,35 @@ const ControlsView = ({
   );
 };
 
+const handleSummarizeNote = async ({
+  note,
+  setSummary,
+  setSummaryLoading,
+}: {
+  note: Note | undefined;
+  setSummary: (summary: string) => void;
+  setSummaryLoading: (summaryLoading: boolean) => void;
+}) => {
+  try {
+    if (note && note.content) {
+      const response = await fetch(`../api/summarize-note`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          note: note.content,
+        }),
+      });
+      const data = await response.json();
+      setSummary(data.message);
+      setSummaryLoading(false);
+    }
+  } catch (error) {
+    console.error("Error submitting prompt: ", error);
+  }
+};
+
 export default function DetailsPlugin({
   size,
   activeFile,
@@ -218,7 +258,27 @@ export default function DetailsPlugin({
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
 }) {
   const [editor] = useLexicalComposerContext();
+  const [noteId, setNoteId] = useState<string | null>(null);
   const [isSpeechToText, setIsSpeechToText] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [summaryLoading, setSummaryLoading] = useState(false);
+
+  useEffect(() => {
+    if (activeFile && noteId !== activeFile.id) {
+      setNoteId(activeFile.id);
+    }
+  }, [activeFile, noteId]);
+
+  useEffect(() => {
+    if (noteId) {
+      setSummaryLoading(true);
+      handleSummarizeNote({
+        note: activeFile!,
+        setSummary,
+        setSummaryLoading,
+      });
+    }
+  }, [activeFile, noteId]);
 
   return (
     <div className="flex w-full h-32 gap-2 px-2">
@@ -230,7 +290,9 @@ export default function DetailsPlugin({
         setActiveFile={setActiveFile}
         thin={size === "sm"}
       />
-      {size === "lg" && <SummaryView />}
+      {size === "lg" && (
+        <SummaryView summary={summary} loading={summaryLoading} />
+      )}
       <ControlsView
         editor={editor}
         isSpeechToText={isSpeechToText}
