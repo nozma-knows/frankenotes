@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, NextRouter } from "next/router";
 import Link from "next/link";
 import Dialog from "@mui/material/Dialog";
@@ -15,13 +15,21 @@ interface DropdownProps {
   tabs: TabType[];
 }
 
-const Options = ({ tabs, router }: { tabs: TabType[]; router: NextRouter }) => {
+const Options = ({
+  tabs,
+  close,
+  router,
+}: {
+  tabs: TabType[];
+  close: () => void;
+  router: NextRouter;
+}) => {
   const currentPath = `${router.pathname}`;
   return (
     <ThemeProvider theme={muiTheme}>
       <Dialog
         open
-        onClose={() => close()}
+        onClose={close}
         sx={{
           "& .MuiDialog-container": {
             justifyContent: "flex-start",
@@ -54,6 +62,10 @@ export default function Dropdown({ tabs }: DropdownProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    console.log("open: ", open);
+  }, [open]);
+
   return (
     <div className="flex">
       {open ? (
@@ -62,7 +74,9 @@ export default function Dropdown({ tabs }: DropdownProps) {
             className="flex md:hidden text-3xl button cursor-pointer"
             onClick={() => setOpen(false)}
           />
-          <Options tabs={tabs} router={router} />
+          <div>
+            <Options tabs={tabs} router={router} close={() => setOpen(false)} />
+          </div>
         </>
       ) : (
         <IoMenu
