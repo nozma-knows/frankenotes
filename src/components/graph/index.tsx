@@ -1,3 +1,13 @@
+export { default as UsersQuery } from "./queries/Users";
+export { default as NotesQuery } from "./queries/Notes";
+export { default as NoteQuery } from "./queries/Note";
+export { default as NotesQueriesQuery } from "./queries/NotesQueries";
 export { default as CreateLoginMutation } from "./mutations/CreateLogin";
 export { default as CreateSessionMutation } from "./mutations/CreateSession";
 export { default as DeleteSessionMutation } from "./mutations/DeleteSession";
+export { default as CreateNoteMutation } from "./mutations/CreateNote";
+export { default as DeleteNoteMutation } from "./mutations/DeleteNote";
+export { default as UpdateNoteMutation } from "./mutations/UpdateNote";
+export { default as CreateNotesQueryMutation } from "./mutations/CreateNotesQuery";
+export { default as DeleteNotesQueryMutation } from "./mutations/DeleteNotesQuery";
+export { default as UpdateNotesQueryMutation } from "./mutations/UpdateNotesQuery";
