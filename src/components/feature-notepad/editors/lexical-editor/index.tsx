@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { UpdateNoteMutation } from "@/components/graph";
+import { UpdateNoteMutation, CreateNoteMutation } from "@/components/graph";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -47,14 +47,6 @@ type LexicalEditorProps = {
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
 };
 
-const Placeholder = () => {
-  return (
-    <div className="absolute p-4 opacity-60 text-main-light">
-      Start writing...
-    </div>
-  );
-};
-
 export default function LexicalEditor({
   config,
   activeFile,
@@ -91,14 +83,41 @@ export default function LexicalEditor({
     activeFile: Note | null,
     setMarkdownContent: (markdownContent: string) => void
   ) => {
+    console.log("activeFile: ", activeFile);
+    if (!activeFile) {
+      CreateNote();
+    }
     const updatedContent = data.read(() => {
       const markdown = $convertToMarkdownString(TRANSFORMERS);
       setMarkdownContent(markdown);
       return markdown;
     });
     if (activeFile && updatedContent) {
+      console.log("updatedContent: ", updatedContent);
       UpdateNote({ note: activeFile, updatedContent });
     }
+  };
+
+  // useMutaiton call for creating a note
+  const [createNote, { loading: loadingNote, error: errorGrabbingNote }] =
+    useMutation(CreateNoteMutation, {
+      onCompleted: (data: { createNote: Note }) => {
+        refetch();
+        setActiveFile(data.createNote);
+      },
+      onError: () => console.log("error!"),
+    });
+
+  const CreateNote = () => {
+    const input = {
+      authorId,
+      title: "",
+    };
+    createNote({
+      variables: {
+        input,
+      },
+    });
   };
 
   // useMutaiton call for updating a note
@@ -185,7 +204,7 @@ export default function LexicalEditor({
                   />
                 </div>
               }
-              placeholder={<Placeholder />}
+              placeholder={<></>}
               ErrorBoundary={LexicalErrorBoundary}
             />
           </div>
