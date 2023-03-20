@@ -1280,7 +1280,7 @@
     "@lexical/yjs" "0.9.0"
     react-error-boundary "^3.1.4"
 
-"@lexical/rich-text@0.9.0":
+"@lexical/rich-text@0.9.0", "@lexical/rich-text@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@lexical/rich-text/-/rich-text-0.9.0.tgz#269283a57dddfe033164a6b541fa2a720daf1b67"
   integrity sha512-FC2stGty/S5hrQW3uL3xsrNXvKmPqhsSG73gwfx5VH6CxwABQjBGfNq1wO5p02c3J/KOC8OeKuEtgbwldEX48Q==
@@ -3882,6 +3882,7 @@ katex@^0.16.4:
   integrity sha512-WudRKUj8yyBeVDI4aYMNxhx5Vhh2PjpzQw1GRu/LVGqL4m1AxwD1GcUp0IMbdJaf5zsjtj8ghP0DOQRYhroNkw==
   dependencies:
     commander "^8.0.0"
+
 langchain@^0.0.36:
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.36.tgz#6dc67b84d1e543308259e58854815e0e08ef1413"
