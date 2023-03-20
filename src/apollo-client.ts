@@ -7,7 +7,7 @@ console.log(
 );
 
 const uri = `${process.env.NEXT_PUBLIC_BACKEND_URI}/api`;
-
+console.log("URI: ", uri);
 const httpLink = createHttpLink({
   uri,
 });
