@@ -83,10 +83,11 @@ export default function LexicalEditor({
     activeFile: Note | null,
     setMarkdownContent: (markdownContent: string) => void
   ) => {
-    console.log("activeFile: ", activeFile);
-    if (!activeFile) {
-      CreateNote();
-    }
+    const dataJSON = data.toJSON();
+    const isEmpty = dataJSON.root.direction === null;
+    // if (!activeFile && !isEmpty) {
+    //   CreateNote();
+    // }
     const updatedContent = data.read(() => {
       const markdown = $convertToMarkdownString(TRANSFORMERS);
       setMarkdownContent(markdown);
