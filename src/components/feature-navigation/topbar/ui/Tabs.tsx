@@ -20,9 +20,9 @@ export default function Tabs({ tabs }: TabsProps) {
         const onPath = link === currentPath; // True if tab corresponds to current path
         return (
           <Link
-            className={`${
+            className={`flex ${
               onPath && "text-[#a56baf]"
-            } text-lg font-semibold button hidden md:flex`}
+            } text-lg font-semibold button`}
             key={label}
             href={link}
           >
