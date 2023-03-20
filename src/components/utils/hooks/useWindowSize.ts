@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
  */
 
 export const mobileScreenMax = 480;
-export const smallScreenMax = 767;
+export const smScreenMax = 767;
 export const mdScreenMax = 1024;
 export const lgScreenMax = 1280;
 export const xlScreenMin = 1281;
