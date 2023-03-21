@@ -54,13 +54,14 @@ const handleQueryNotes = async ({
   notes,
   notesQuery,
   UpdateNotesQuery,
-}: // messages,
+  messages,
+}: //
 // setMessages,
 {
   notes: Note[] | undefined;
   notesQuery: NotesQuery;
   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
-  // messages: { message: string; sender: string }[];
+  messages: { message: string; sender: string }[];
   // setMessages: (messages: { message: string; sender: string }[]) => void;
 }) => {
   try {
@@ -78,6 +79,7 @@ const handleQueryNotes = async ({
       },
       body: JSON.stringify({
         notes: content,
+        pastQueries: messages,
         query: notesQuery.query,
       }),
     });
@@ -148,6 +150,7 @@ export default function QueryNotesPopup({
           notes,
           notesQuery: data.createNotesQuery,
           UpdateNotesQuery,
+          messages,
         });
       },
       onError: () => console.log("error!"),
@@ -202,63 +205,8 @@ export default function QueryNotesPopup({
         status: notesQuery.status,
       };
     });
-    // return (
-    //   <Popup
-    //     title="Ask your notes a question!"
-    //     style={{
-    //       backgroundColor: "#061515",
-    //       color: "#e3d1e6",
-    //       display: "flex",
-    //       flexDirection: "column",
-    //       alignItems: "center",
-    //       borderRadius: "12px",
-    //       padding: "2rem",
-    //       width: screenSize.width > 1024 ? "65%" : "90%",
-    //       height: `100%`,
-    //     }}
-    //     onClose={onClose}
-    //   >
-    //     <div className="flex w-full h-full justify-center items-center overflow-hidden">
-    //       <form
-    //         className="flex w-full h-full"
-    //         onSubmit={handleSubmit(({ query }) =>
-    //           addUserMessage({
-    //             query,
-    //             CreateNotesQuery,
-    //             // messages,
-    //             // setMessages,
-    //             setValue,
-    //           })
-    //         )}
-    //         // onSubmit={handleSubmit(CreateNotesQuery(query))}
-    //       >
-    //         <div className="flex flex-col w-full px-8 gap-8">
-    //           <MessageContainer messages={messages} loading={loading} />
-    //           <div className="flex items-center gap-2">
-    //             <TextField
-    //               control={control}
-    //               name="query"
-    //               type="text"
-    //               placeholder={`${messages.length ? "" : "Ask a question!"}`}
-    //               required="Query is required."
-    //               errors={errors}
-    //             />
-    //             <div className="pb-5">
-    //               <Button
-    //                 label="Send"
-    //                 disabled={loading}
-    //                 className="flex py-2"
-    //               />
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </form>
-    //     </div>
-    //   </Popup>
-    // );
     return (
       <Popup
-        // title="Ask your notes a question!"
         style={{
           backgroundColor: "#061515",
           display: "flex",
