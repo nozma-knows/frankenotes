@@ -239,6 +239,7 @@ export default function OpenView({
     const input = {
       authorId,
       title: "",
+      content: "",
     };
     createNote({
       variables: {
