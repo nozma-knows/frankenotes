@@ -17,15 +17,12 @@ import { useEditorHistoryState } from "../../plugins/toolbar-plugin/context/Edit
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import LinkPlugin from "../../plugins/link-plugin";
-// import ClickableLinkPlugin from "../../plugins/clickable-link-plugin";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
-// import ListMaxIndentLevelPlugin from "../../plugins/list-max-indent-level-plugin";
 import PlaygroundAutoLinkPlugin from "../../plugins/auto-link-plugin";
 import FloatingLinkEditorPlugin from "../../plugins/floating-link-editor-plugin";
 import DetailsPlugin from "../../plugins/details-plugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
-// import TabFocusPlugin from "../../plugins/TabFocusPlugin";
 import DraggableBlockPlugin from "../../plugins/DraggableBlockPlugin";
 import { EditorState } from "lexical";
 import { ApolloQueryResult } from "@apollo/client";
@@ -62,8 +59,6 @@ export default function LexicalEditor({
 
   useEffect(() => {
     const { width } = windowSize;
-    console.log("size: ", size);
-    console.log("width: ", width);
     if (width >= lgScreenMax || (width >= mdScreenMax && !fileManagerOpen)) {
       setSize("lg");
     } else if (
@@ -85,16 +80,22 @@ export default function LexicalEditor({
   ) => {
     const dataJSON = data.toJSON();
     const isEmpty = dataJSON.root.direction === null;
-    // if (!activeFile && !isEmpty) {
-    //   CreateNote();
-    // }
+    if (!activeFile && !isEmpty) {
+      const content = data.read(() => {
+        const markdown = $convertToMarkdownString(TRANSFORMERS);
+        setMarkdownContent(markdown);
+        return markdown;
+      });
+      if (content.length <= 1) {
+        CreateNote({ content: content });
+      }
+    }
     const updatedContent = data.read(() => {
       const markdown = $convertToMarkdownString(TRANSFORMERS);
       setMarkdownContent(markdown);
       return markdown;
     });
     if (activeFile && updatedContent) {
-      console.log("updatedContent: ", updatedContent);
       UpdateNote({ note: activeFile, updatedContent });
     }
   };
@@ -103,16 +104,17 @@ export default function LexicalEditor({
   const [createNote, { loading: loadingNote, error: errorGrabbingNote }] =
     useMutation(CreateNoteMutation, {
       onCompleted: (data: { createNote: Note }) => {
+        console.log("createNote: ", data.createNote);
         refetch();
         setActiveFile(data.createNote);
       },
       onError: () => console.log("error!"),
     });
 
-  const CreateNote = () => {
+  const CreateNote = ({ content }: { content: string }) => {
     const input = {
       authorId,
-      title: "",
+      content,
     };
     createNote({
       variables: {

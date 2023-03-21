@@ -62,10 +62,6 @@ export default function Dropdown({ tabs }: DropdownProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("open: ", open);
-  }, [open]);
-
   return (
     <div className="flex">
       {open ? (

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { UpdateNoteMutation } from "@/components/graph";
 import { LexicalEditor } from "lexical";
+import { CLEAR_EDITOR_COMMAND } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   SPEECH_TO_TEXT_COMMAND,
@@ -276,14 +277,15 @@ export default function DetailsPlugin({
   const [summaryLoading, setSummaryLoading] = useState(false);
 
   useEffect(() => {
-    if (!activeFile && summary !== "") {
+    if (!activeFile) {
+      editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
       setSummary("");
     }
     if (activeFile && noteId !== activeFile.id) {
       setNoteId(activeFile.id);
     } else {
     }
-  }, [activeFile, noteId, summary]);
+  }, [activeFile, noteId, summary, editor]);
 
   // useEffect(() => {
   //   if (noteId) {

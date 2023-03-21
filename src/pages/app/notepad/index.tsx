@@ -55,7 +55,6 @@ export default function Notepad({ token }: { token: string }) {
     return <div>Error Page...</div>;
   }
   if (data && authorId) {
-    console.log("notepad - activeNote: ", activeNote);
     return (
       <Page hideTopbar>
         <div className="flex flex-col sm:flex-row gap-2 p-2 w-full">
