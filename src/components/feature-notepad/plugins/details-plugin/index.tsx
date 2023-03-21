@@ -285,15 +285,15 @@ export default function DetailsPlugin({
     }
   }, [activeFile, noteId, summary]);
 
-  useEffect(() => {
-    if (noteId) {
-      handleSummarizeNote({
-        note: activeFile!,
-        setSummary,
-        setSummaryLoading,
-      });
-    }
-  }, [activeFile, noteId]);
+  // useEffect(() => {
+  //   if (noteId) {
+  //     handleSummarizeNote({
+  //       note: activeFile!,
+  //       setSummary,
+  //       setSummaryLoading,
+  //     });
+  //   }
+  // }, [activeFile, noteId]);
 
   return (
     <div className="flex w-full h-32 gap-2 px-2">
