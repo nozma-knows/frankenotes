@@ -43,7 +43,6 @@ interface FontViewProps {
   clearFormatting: any;
 }
 export default function FontView(props: FontViewProps) {
-  console.log("props.windowSize: ", props.windowSize);
   return (
     <>
       <>

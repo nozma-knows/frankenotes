@@ -15,7 +15,6 @@ export default function LogoutButton() {
     DeleteSessionMutation,
     {
       onCompleted: (data: { login: Session }) => {
-        console.log("delete session completed");
         removeCookie("token", { path: "/" });
         localStorage.removeItem("token");
         router.push("/");

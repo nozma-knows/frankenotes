@@ -21,11 +21,6 @@ export type CreateLoginInput = {
   passwordConfirmation: Scalars['String'];
 };
 
-export type CreateNoteInput = {
-  authorId: Scalars['ID'];
-  title?: InputMaybe<Scalars['String']>;
-};
-
 export type CreateNotesQueryInput = {
   authorId: Scalars['ID'];
   query: Scalars['String'];
@@ -66,7 +61,7 @@ export type MutationCreateLoginArgs = {
 
 
 export type MutationCreateNoteArgs = {
-  input: CreateNoteInput;
+  input: NoteInput;
 };
 
 
