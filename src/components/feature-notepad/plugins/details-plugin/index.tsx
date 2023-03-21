@@ -20,9 +20,6 @@ import {
 import useWindowSize, {
   smScreenMax,
 } from "@/components/utils/hooks/useWindowSize";
-// import theme from "@/components/ui/form-fields/ToolbarTheme";
-// import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-// import TextField from "@/components/ui/form-fields/TextField";
 
 const FilesView = ({
   setFileManagerOpen,
@@ -191,6 +188,7 @@ const ControlsView = ({
   isSpeechToText: boolean;
   setIsSpeechToText: (isSpeechToText: boolean) => void;
 }) => {
+  const aiPromptButtonDisabled = true;
   return (
     <div className="flex flex-col gap-2">
       {SUPPORT_SPEECH_RECOGNITION && (
@@ -210,10 +208,12 @@ const ControlsView = ({
 
       <ToolbarButton
         Icon={TbPrompt}
-        label="AI Prompt"
-        disabled={false}
+        label="AI Prompt - Feature coming soon!"
+        disabled={aiPromptButtonDisabled}
         onClick={() => console.log("Clicked AI propmt button")}
-        className="flex items-center justify-center button bg-tertiary-dark p-2 rounded-lg h-[54px] w-[54px]"
+        className={`${
+          aiPromptButtonDisabled ? "opacity-50" : "button"
+        } flex items-center justify-center bg-tertiary-dark p-2 rounded-lg h-[54px] w-[54px]`}
         iconSize="text-3xl"
       />
     </div>

@@ -259,6 +259,7 @@ function useFloatingLinkEditorToolbar(
   editor: LexicalEditor,
   anchorElem: HTMLElement
 ): JSX.Element | null {
+  const linkEditorRef = useRef<HTMLDivElement>(null);
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLink, setIsLink] = useState(false);
 
@@ -277,6 +278,36 @@ function useFloatingLinkEditorToolbar(
       }
     }
   }, []);
+
+  useEffect(() => {
+    const linkEditor = linkEditorRef.current;
+
+    if (linkEditor !== null) {
+      const { top, left } = linkEditor.getBoundingClientRect();
+      linkEditor.style.top = `${top + 40}px`;
+      linkEditor.style.left = `${Math.min(
+        left,
+        window.innerWidth - linkEditor.offsetWidth - 20
+      )}px`;
+    }
+  }, [linkEditorRef]);
+
+  // useEffect(() => {
+  //   const linkEditor = linkEditorRef.current;
+
+  //   if (linkEditor !== null) {
+  //     const handle = (event: MouseEvent) => {
+  //       const target = event.target;
+  //       if (linkEditor.current && linkEditor.current.contains(target as Node))
+  //         return;
+  //     };
+  //     document.addEventListener("click", handle);
+
+  //     return () => {
+  //       document.removeEventListener("click", handle);
+  //     };
+  //   }
+  // }, [linkEditorRef]);
 
   useEffect(() => {
     return mergeRegister(

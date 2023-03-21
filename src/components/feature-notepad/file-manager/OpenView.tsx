@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useForm, FieldValues } from "react-hook-form";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Note } from "@/__generated__/graphql";
-// import { FaTrash } from "react-icons/fa";
+import { Tooltip } from "@mui/material";
+import { IconType } from "react-icons";
 import { BsThreeDots, BsTrash } from "react-icons/bs";
 import {
   BsQuestionLg,
@@ -11,8 +12,6 @@ import {
   BsPlusLg,
   BsChevronLeft,
   BsChevronDown,
-  BsXLg,
-  BsCheck,
 } from "react-icons/bs";
 import { ApolloQueryResult } from "@apollo/client";
 import QueryNotesPopup from "@/components/feature-ai/ui/popups/QueryNotesPopup";
@@ -33,6 +32,35 @@ interface OpenViewProps {
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
 }
 
+const TopbarButton = ({
+  Icon,
+  onClick,
+  label,
+  disabled = false,
+  disabledMessage,
+}: {
+  Icon: IconType;
+  onClick: MouseEventHandler<SVGElement>;
+  label: string;
+  disabled?: boolean;
+  disabledMessage?: string;
+}) => {
+  console.log("label: ", label);
+  return (
+    <div
+      className={
+        disabled ? `cursor-not-allowed	opacity-50 text-lg` : `button text-lg`
+      }
+    >
+      <Tooltip title={disabled ? `${label} - ${disabledMessage}` : label} arrow>
+        <div>
+          <Icon className="text-lg" onClick={!disabled ? onClick : undefined} />
+        </div>
+      </Tooltip>
+    </div>
+  );
+};
+
 const Topbar = ({
   size,
   authorId,
@@ -46,16 +74,12 @@ const Topbar = ({
   CreateNote: any;
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
 }) => {
-  // const [namingFile, setNamingFile] = useState(false);
   const [showQueryNotesPopup, setShowQueryNotesPopup] = useState(false);
 
   const { register, handleSubmit, setValue } = useForm<FieldValues>();
 
   const createNewNote = () => {
     CreateNote();
-
-    // setNamingFile(false);
-    // setValue("title", "");
   };
 
   return (
@@ -70,98 +94,48 @@ const Topbar = ({
       <div className="flex gap-1 sm:gap-4 items-center justify-end w-full">
         <div className="flex w-full gap-1 justify-between items-center text-main-dark">
           <div className="flex gap-1 sm:gap-4">
-            <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-              <BsSearch
-                className="text-lg"
+            <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+              <TopbarButton
+                Icon={BsSearch}
                 onClick={() => console.log("search pressed.")}
+                label="Search notes"
+                disabled={true}
+                disabledMessage="Feature coming soon!"
               />
             </div>
-            <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-              <BsQuestionLg
-                className="cursor-pointer"
+            <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+              <TopbarButton
+                Icon={BsQuestionLg}
                 onClick={() => setShowQueryNotesPopup(true)}
+                label="Ask your notes a question"
               />
             </div>
           </div>
           <div className="flex gap-1 sm:gap-4">
-            <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-              <BsPlusLg
-                className="cursor-pointer"
-                // onClick={() => setNamingFile(true)}
+            <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+              <TopbarButton
+                Icon={BsPlusLg}
                 onClick={() => createNewNote()}
+                label="Create a new note"
               />
             </div>
-            <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+            <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
               {size.width >= smScreenMax ? (
-                <BsChevronLeft
-                  className="cursor-pointer"
+                <TopbarButton
+                  Icon={BsChevronLeft}
                   onClick={() => setFileManagerOpen(false)}
+                  label="Close file manager"
                 />
               ) : (
-                <BsChevronDown
-                  className="cursor-pointer"
+                <TopbarButton
+                  Icon={BsChevronDown}
                   onClick={() => setFileManagerOpen(false)}
+                  label="Close file manager"
                 />
               )}
             </div>
           </div>
         </div>
-        {/* {namingFile ? (
-          <div className="flex items-center w-full">
-            <form
-              className="flex items-center gap-4 w-full"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <input
-                {...register("title")}
-                className="bg-transparent border-b-2 border-[#1e2626] outline-none w-full"
-              />
-              <div className="flex gap-1 sm:gap-4">
-                <button className="flex items-center justify-center w-9 h-9 bg-tertiary-dark rounded-md">
-                  <BsCheck type="submit" className="cursor-pointer text-2xl" />
-                </button>
-
-                <div className="flex items-center justify-center w-9 h-9 bg-tertiary-dark rounded-md">
-                  <BsXLg
-                    className="cursor-pointer text-lg"
-                    onClick={() => setNamingFile(false)}
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-        ) : (
-          <div className="flex w-full gap-1 justify-between items-center">
-            <div className="flex gap-1 sm:gap-4">
-              <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-                <BsSearch
-                  className="text-lg"
-                  onClick={() => console.log("search pressed.")}
-                />
-              </div>
-              <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-                <BsQuestionLg
-                  className="cursor-pointer"
-                  onClick={() => setShowQueryNotesPopup(true)}
-                />
-              </div>
-            </div>
-            <div className="flex gap-1 sm:gap-4">
-              <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-                <BsPlusLg
-                  className="cursor-pointer"
-                  onClick={() => setNamingFile(true)}
-                />
-              </div>
-              <div className="button flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-                <BsChevronLeft
-                  className="cursor-pointer"
-                  onClick={() => setFileManagerOpen(false)}
-                />
-              </div>
-            </div>
-          </div>
-        )} */}
       </div>
     </div>
   );
