@@ -278,7 +278,7 @@ export default function QueryNotesPopup({
           <div className="flex w-full h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
             <MessageContainer messages={messages} loading={loading} />
           </div>
-          <div className="flex w-full items-center h-20 bg-main-dark text-main-dark rounded-lg">
+          <div className="flex w-full items-center h-24 bg-main-dark text-main-dark rounded-lg">
             <form
               className="flex w-full h-full"
               onSubmit={handleSubmit(({ query }) =>
@@ -294,7 +294,7 @@ export default function QueryNotesPopup({
             >
               <div className="flex w-full px-4">
                 <div className="flex w-full gap-4">
-                  <div className="flex w-full h-full">
+                  <div className="flex w-full h-full items-center">
                     <NoStyleTextfield
                       control={control}
                       name="query"

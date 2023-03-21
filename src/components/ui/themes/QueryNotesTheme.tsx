@@ -30,7 +30,7 @@ const queryNotesTheme = createTheme({
         root: {
           width: "100%",
           fieldset: {
-            borderWidth: 2,
+            borderWidth: 0,
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderWidth: 0,
