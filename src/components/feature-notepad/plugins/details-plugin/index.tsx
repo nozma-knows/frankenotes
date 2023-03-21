@@ -103,13 +103,13 @@ const DetailsView = ({
   }, [UpdateNote, activeFile, setActiveFile, title]);
 
   return (
-    <div className="flex flex-1 w-full flex-col gap-2 bg-tertiary-dark rounded-lg pt-1 pb-2 px-2">
+    <div className="flex flex-1 w-full flex-col gap-2 bg-tertiary-dark rounded-lg p-3">
       {activeFile && (
         <div className="flex flex-col h-full justify-between">
           <input
             className={`text-2xl w-full font-bold ${
               !activeFile.title && "opacity-60"
-            } bg-transparent`}
+            } bg-transparent outline-none`}
             name="title"
             value={title}
             placeholder="Untitled"
@@ -175,7 +175,7 @@ const SummaryView = ({
       {loading ? (
         <PulseLoader color="#e3d1e6" size={8} className="py-7 px-4" />
       ) : (
-        <div className="p-4 overflow-auto">{summary}</div>
+        <div className="p-3 overflow-auto">{summary}</div>
       )}
     </div>
   );
@@ -285,15 +285,15 @@ export default function DetailsPlugin({
     }
   }, [activeFile, noteId, summary]);
 
-  // useEffect(() => {
-  //   if (noteId) {
-  //     handleSummarizeNote({
-  //       note: activeFile!,
-  //       setSummary,
-  //       setSummaryLoading,
-  //     });
-  //   }
-  // }, [activeFile, noteId]);
+  useEffect(() => {
+    if (noteId) {
+      handleSummarizeNote({
+        note: activeFile!,
+        setSummary,
+        setSummaryLoading,
+      });
+    }
+  }, [activeFile, noteId]);
 
   return (
     <div className="flex w-full h-32 gap-2 px-2">

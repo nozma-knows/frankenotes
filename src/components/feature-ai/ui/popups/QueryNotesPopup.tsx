@@ -7,11 +7,13 @@ import {
   NotesQueriesQuery,
 } from "@/components/graph";
 import { Note, NotesQuery } from "@/__generated__/graphql";
-import TextField from "@/components/ui/form-fields/TextField";
+// import TextField from "@/components/ui/form-fields/TextField";
+import NoStyleTextfield from "@/components/ui/form-fields/NoStyleTextField";
 import Button from "@/components/ui/buttons/Button";
 import Popup from "@/components/ui/popups/Popup";
 import MessageContainer from "../MessageContainer";
 import useWindowSize from "@/components/utils/hooks/useWindowSize";
+import { BsFillSendFill } from "react-icons/bs";
 
 interface QueryNotesPopupProps {
   notes: Note[] | undefined;
@@ -99,6 +101,7 @@ export default function QueryNotesPopup({
   onClose,
 }: QueryNotesPopupProps) {
   const screenSize = useWindowSize();
+  const [query, setQuery] = useState("");
 
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -199,57 +202,116 @@ export default function QueryNotesPopup({
         status: notesQuery.status,
       };
     });
+    // return (
+    //   <Popup
+    //     title="Ask your notes a question!"
+    //     style={{
+    //       backgroundColor: "#061515",
+    //       color: "#e3d1e6",
+    //       display: "flex",
+    //       flexDirection: "column",
+    //       alignItems: "center",
+    //       borderRadius: "12px",
+    //       padding: "2rem",
+    //       width: screenSize.width > 1024 ? "65%" : "90%",
+    //       height: `100%`,
+    //     }}
+    //     onClose={onClose}
+    //   >
+    //     <div className="flex w-full h-full justify-center items-center overflow-hidden">
+    //       <form
+    //         className="flex w-full h-full"
+    //         onSubmit={handleSubmit(({ query }) =>
+    //           addUserMessage({
+    //             query,
+    //             CreateNotesQuery,
+    //             // messages,
+    //             // setMessages,
+    //             setValue,
+    //           })
+    //         )}
+    //         // onSubmit={handleSubmit(CreateNotesQuery(query))}
+    //       >
+    //         <div className="flex flex-col w-full px-8 gap-8">
+    //           <MessageContainer messages={messages} loading={loading} />
+    //           <div className="flex items-center gap-2">
+    //             <TextField
+    //               control={control}
+    //               name="query"
+    //               type="text"
+    //               placeholder={`${messages.length ? "" : "Ask a question!"}`}
+    //               required="Query is required."
+    //               errors={errors}
+    //             />
+    //             <div className="pb-5">
+    //               <Button
+    //                 label="Send"
+    //                 disabled={loading}
+    //                 className="flex py-2"
+    //               />
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </form>
+    //     </div>
+    //   </Popup>
+    // );
     return (
       <Popup
-        title="Ask your notes a question!"
+        // title="Ask your notes a question!"
         style={{
           backgroundColor: "#061515",
-          color: "#e3d1e6",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           borderRadius: "12px",
-          padding: "2rem",
+          padding: "1rem",
           width: screenSize.width > 1024 ? "65%" : "90%",
           height: `100%`,
         }}
         onClose={onClose}
       >
-        <div className="flex w-full h-full justify-center items-center overflow-hidden">
-          <form
-            className="flex w-full h-full"
-            onSubmit={handleSubmit(({ query }) =>
-              addUserMessage({
-                query,
-                CreateNotesQuery,
-                // messages,
-                // setMessages,
-                setValue,
-              })
-            )}
-            // onSubmit={handleSubmit(CreateNotesQuery(query))}
-          >
-            <div className="flex flex-col w-full px-8 gap-8">
-              <MessageContainer messages={messages} loading={loading} />
-              <div className="flex items-center gap-2">
-                <TextField
-                  control={control}
-                  name="query"
-                  type="text"
-                  placeholder={`${messages.length ? "" : "Ask a question!"}`}
-                  required="Query is required."
-                  errors={errors}
-                />
-                <div className="pb-5">
-                  <Button
-                    label="Send"
-                    disabled={loading}
-                    className="flex py-2"
-                  />
+        <div className="flex flex-col w-full h-full rounded-lg p-4 gap-4 bg-main-light">
+          <div className="flex w-full justify-center p-4">
+            <div className="text-4xl font-bold">Ask your notes a question!</div>
+          </div>
+          <div className="flex w-full h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+            <MessageContainer messages={messages} loading={loading} />
+          </div>
+          <div className="flex w-full items-center h-20 bg-main-dark text-main-dark rounded-lg">
+            <form
+              className="flex w-full h-full"
+              onSubmit={handleSubmit(({ query }) =>
+                addUserMessage({
+                  query,
+                  CreateNotesQuery,
+                  // messages,
+                  // setMessages,
+                  setValue,
+                })
+              )}
+              // onSubmit={handleSubmit(CreateNotesQuery(query))}
+            >
+              <div className="flex w-full px-4">
+                <div className="flex w-full gap-4">
+                  <div className="flex w-full h-full">
+                    <NoStyleTextfield
+                      control={control}
+                      name="query"
+                      type="text"
+                      placeholder="What would you like to ask next?"
+                      required="Query is required."
+                      errors={errors}
+                    />
+                  </div>
+
+                  <button>
+                    <BsFillSendFill className="text-3xl button text-[#a56baf]" />
+                  </button>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </Popup>
     );

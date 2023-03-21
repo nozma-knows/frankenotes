@@ -34,11 +34,11 @@ export default function MessageContainer({
 
   return (
     <div
-      className="flex flex-col w-full h-full border-2 p-4 rounded-xl gap-4 overflow-auto scroll-smooth"
+      className="flex flex-col w-full h-full rounded-xl gap-4 overflow-auto scroll-smooth"
       ref={scrollRef}
     >
       {messages.length ? (
-        <div>
+        <div className="flex flex-col gap-4">
           {messages.map((message, index) => {
             return (
               <div className="flex flex-col gap-4" key={index}>
