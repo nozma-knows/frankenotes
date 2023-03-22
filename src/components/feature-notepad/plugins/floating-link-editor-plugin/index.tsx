@@ -227,16 +227,6 @@ function FloatingLinkEditor({
           <a href={linkUrl} target="_blank" rel="noopener noreferrer">
             {linkUrl}
           </a>
-          {/* <div
-            className="link-edit"
-            role="button"
-            tabIndex={0}
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => {
-              setEditedLinkUrl(linkUrl);
-              setEditMode(true);
-            }}
-          /> */}
           <div className="button">
             <BsFillPencilFill
               className="text-2xl"
@@ -288,23 +278,6 @@ function useFloatingLinkEditorToolbar(
       )}px`;
     }
   }, [linkEditorRef]);
-
-  // useEffect(() => {
-  //   const linkEditor = linkEditorRef.current;
-
-  //   if (linkEditor !== null) {
-  //     const handle = (event: MouseEvent) => {
-  //       const target = event.target;
-  //       if (linkEditor.current && linkEditor.current.contains(target as Node))
-  //         return;
-  //     };
-  //     document.addEventListener("click", handle);
-
-  //     return () => {
-  //       document.removeEventListener("click", handle);
-  //     };
-  //   }
-  // }, [linkEditorRef]);
 
   useEffect(() => {
     return mergeRegister(
