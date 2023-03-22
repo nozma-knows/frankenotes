@@ -45,7 +45,6 @@ const TopbarButton = ({
   disabled?: boolean;
   disabledMessage?: string;
 }) => {
-  console.log("label: ", label);
   return (
     <div
       className={
