@@ -229,6 +229,10 @@ export default function LexicalEditor({
           {floatingAnchorElem && !isSmallWidthViewport && (
             <>
               <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+            </>
+          )}
+          {floatingAnchorElem && (
+            <>
               <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
             </>
           )}
