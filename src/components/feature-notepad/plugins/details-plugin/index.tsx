@@ -212,7 +212,7 @@ const ControlsView = ({
         disabled={aiPromptButtonDisabled}
         onClick={() => console.log("Clicked AI propmt button")}
         className={`${
-          aiPromptButtonDisabled ? "opacity-50" : "button"
+          aiPromptButtonDisabled ? "opacity-50 cursor-not-allowed" : "button"
         } flex items-center justify-center bg-tertiary-dark p-2 rounded-lg h-[54px] w-[54px]`}
         iconSize="text-3xl"
       />

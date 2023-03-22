@@ -107,6 +107,8 @@ const Topbar = ({
                 Icon={BsQuestionLg}
                 onClick={() => setShowQueryNotesPopup(true)}
                 label="Ask your notes a question"
+                disabled={true}
+                disabledMessage="Feature coming soon!"
               />
             </div>
           </div>
