@@ -188,7 +188,6 @@ export default function LexicalEditor({
     <LexicalComposer initialConfig={config}>
       <div className="flex w-full gap-2">
         <div className="flex flex-col w-full bg-main-light rounded-xl">
-          {/* <ToolbarPlugin fileManagerOpen={fileManagerOpen} /> */}
           <ToolbarPlugin size={size} fileManagerOpen={fileManagerOpen} />
           <DetailsPlugin
             size={size}
@@ -202,9 +201,10 @@ export default function LexicalEditor({
               contentEditable={
                 <div ref={onRef} className="flex w-full">
                   <ContentEditable
-                    className="flex h-full p-4 max-h-min flex-col w-full outline-none overflow-y-auto text-main-light"
+                    className="flex h-full p-4 max-h-min flex-col w-full outline-none overflow-y-auto text-main-light editor"
                     value={markdownContent}
                   />
+                  {/* <ContentEditable className="editor" value={markdownContent} /> */}
                 </div>
               }
               placeholder={<></>}
@@ -216,7 +216,6 @@ export default function LexicalEditor({
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
           <ListPlugin />
           <CheckListPlugin />
-          {/* <ListMaxIndentLevelPlugin maxDepth={7} /> */}
           <AutoFocusPlugin />
           <LinkPlugin />
           <PlaygroundAutoLinkPlugin />
@@ -225,13 +224,15 @@ export default function LexicalEditor({
           />
           <FilePlugin activeFile={activeFile} />
           <SpeechToTextPlugin />
-          {/* <TabFocusPlugin /> */}
           <TabIndentationPlugin />
-          {/* <ActionsPlugin /> */}
 
           {floatingAnchorElem && !isSmallWidthViewport && (
             <>
               <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+            </>
+          )}
+          {floatingAnchorElem && (
+            <>
               <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
             </>
           )}

@@ -74,6 +74,10 @@ body {
   transform: scale(1.05);
 }
 
+.editor a {
+  color: #1d4ed8
+}
+
 @layer base {
   h1 {
     font-family: 'Josefin Sans', sans-serif;
