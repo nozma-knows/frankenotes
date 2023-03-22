@@ -85,13 +85,6 @@ const handleQueryNotes = async ({
     });
     const data = await response.json();
     UpdateNotesQuery(notesQuery, data.message);
-    // setMessages([
-    //   ...messages,
-    //   {
-    //     message: data.message,
-    //     sender: "bot",
-    //   },
-    // ]);
   } catch (error) {
     console.error("Error submitting prompt: ", error);
   }
@@ -107,16 +100,6 @@ export default function QueryNotesPopup({
 
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   if (messages.length && messages[messages.length - 1].sender === "user") {
-  //     setLoading(true);
-  //     const query = messages[messages.length - 1].message;
-  //     handleQueryNotes({ notes, query, messages, setMessages });
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [messages, notes, setMessages]);
 
   // useMutaiton call for updating a notesQuery
   const [
