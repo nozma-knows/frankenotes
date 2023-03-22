@@ -4,8 +4,9 @@ import { ChatCompletionRequestMessage } from "openai";
 import { OpenAIChat } from "langchain/llms";
 import { CallbackManager } from "langchain/callbacks";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-// import { loadQAMapReduceChain } from "langchain/chains";
-import { loadQAStuffChain } from "langchain/chains";
+import { loadQAMapReduceChain } from "langchain/chains";
+// import { loadQAStuffChain } from "langchain/chains";
+
 type ResponseError = {
   message: string;
 };
@@ -91,8 +92,8 @@ export default async function handler(
       verbose: true,
       callbackManager,
     });
-    // const chain = loadQAMapReduceChain(llm);
-    const chain = loadQAStuffChain(llm);
+    // const chain = loadQAStuffChain(llm);
+    const chain = loadQAMapReduceChain(llm);
 
     const response = await chain.call({
       input_documents: docs,
