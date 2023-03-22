@@ -21,10 +21,14 @@ import {
 import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { BsFillPencilFill } from "react-icons/bs";
+import {
+  BsFillPencilFill,
+  BsXCircleFill,
+  BsCheckCircleFill,
+} from "react-icons/bs";
 
 import { getSelectedNode } from "../toolbar-plugin/utils";
-import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
+import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
 import { sanitizeUrl } from "../toolbar-plugin/utils/url";
 
 function FloatingLinkEditor({
@@ -77,23 +81,16 @@ function FloatingLinkEditor({
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
-      const domRange = nativeSelection.getRangeAt(0);
-      let rect;
-      if (nativeSelection.anchorNode === rootElement) {
-        let inner = rootElement;
-        while (inner.firstElementChild != null) {
-          inner = inner.firstElementChild as HTMLElement;
-        }
-        rect = inner.getBoundingClientRect();
-      } else {
-        rect = domRange.getBoundingClientRect();
+      const domRect: DOMRect | undefined =
+        nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
+      if (domRect) {
+        domRect.y += 40;
+        setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem);
       }
-
-      setFloatingElemPosition(rect, editorElem, anchorElem);
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       if (rootElement !== null) {
-        setFloatingElemPosition(null, editorElem, anchorElem);
+        setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem);
       }
       setLastSelection(null);
       setEditMode(false);
@@ -193,14 +190,13 @@ function FloatingLinkEditor({
   return (
     <div
       ref={editorRef}
-      // className="flex absolute top-0 left-0 z-10 max-w-md	w-full opacity-0 bg-tertiary-dary shadow-lg rounded-lg transition-opacity	duration-500 will-change-transform"
-      className="flex bg-red-900 absolute left-0 top-0"
+      className="flex w-full absolute z-10 max-w-xs bg-tertiary-dark rounded-lg"
     >
       {!isLink ? null : isEditMode ? (
-        <>
+        <div className="flex justify-between items-center w-full p-2">
           <input
             ref={inputRef}
-            className=""
+            className="bg-transparent outline-none"
             value={editedLinkUrl}
             onChange={(event) => {
               setEditedLinkUrl(event.target.value);
@@ -209,37 +205,29 @@ function FloatingLinkEditor({
               monitorInputInteraction(event);
             }}
           />
-          <div>
-            <div
-              // className="link-cancel"
-              className="w-4 h-4 block p-3 rounded-lg coursor-pointer my-2"
-              role="button"
-              tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => {
-                setEditMode(false);
-              }}
-            />
-
-            {/* <div
-              // className="link-confirm"
-
-              role="button"
-              tabIndex={0}
-            /> */}
-            <BsFillPencilFill
-              className="w-4 h-4 block p-3 rounded-lg coursor=pointer my-2"
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={handleLinkSubmission}
-            />
+          <div className="flex w-full items-center gap-2 justify-end">
+            <div className="button">
+              <BsXCircleFill
+                className="text-2xl"
+                onClick={() => {
+                  setEditMode(false);
+                }}
+              />
+            </div>
+            <div className="button">
+              <BsCheckCircleFill
+                className="text-2xl"
+                onClick={handleLinkSubmission}
+              />
+            </div>
           </div>
-        </>
+        </div>
       ) : (
-        <div className="link-view">
+        <div className="flex justify-between items-center w-full p-2">
           <a href={linkUrl} target="_blank" rel="noopener noreferrer">
             {linkUrl}
           </a>
-          <div
+          {/* <div
             className="link-edit"
             role="button"
             tabIndex={0}
@@ -248,7 +236,16 @@ function FloatingLinkEditor({
               setEditedLinkUrl(linkUrl);
               setEditMode(true);
             }}
-          />
+          /> */}
+          <div className="button">
+            <BsFillPencilFill
+              className="text-2xl"
+              onClick={() => {
+                setEditedLinkUrl(linkUrl);
+                setEditMode(true);
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

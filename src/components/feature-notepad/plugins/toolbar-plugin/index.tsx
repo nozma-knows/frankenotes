@@ -138,6 +138,7 @@ export default function ToolbarPlugin({
       if ($isLinkNode(parent) || $isLinkNode(node)) {
         setIsLink(true);
       } else {
+        setIsLink(false);
       }
 
       if (elementDOM !== null) {
