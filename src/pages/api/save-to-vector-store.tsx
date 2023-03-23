@@ -50,7 +50,6 @@ export default async function handler(
     };
 
     const docs = await loadDocs();
-    console.log("docs: ", docs);
 
     const embeddings = new OpenAIEmbeddings();
     const pinecone = new PineconeClient();
@@ -64,11 +63,20 @@ export default async function handler(
       process.env.PINECONE_INDEX_NAME as string
     );
 
-    await PineconeStore.fromDocuments(docs, embeddings, {
-      pineconeIndex,
-      namespace: authorId,
-    });
+    // await PineconeStore.fromDocuments(docs, embeddings, {
+    //   pineconeIndex,
+    //   namespace: authorId,
+    // });
 
+    const vectorStore = await PineconeStore.fromExistingIndex(
+      new OpenAIEmbeddings(),
+      { pineconeIndex, namespace: authorId }
+    );
+    const docIds = docs.map((doc, index) => `${docId}-vector-${index + 1}`);
+    console.log("docIds: ", docIds);
+    vectorStore.addDocuments(docs, docIds);
+
+    // const index = pinecone.Index(process.env.PINECONE_INDEX_NAME as string);
     // const texts = docs.map(({ pageContent }) => pageContent);
 
     // const embeddedDocs = await embeddings.embedDocuments(texts);
@@ -81,6 +89,7 @@ export default async function handler(
 
     // const upsertRequest = {
     //   vectors,
+    //   namespace: authorId,
     // };
 
     // await index
