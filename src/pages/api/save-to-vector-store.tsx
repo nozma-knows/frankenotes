@@ -64,7 +64,10 @@ export default async function handler(
       process.env.PINECONE_INDEX_NAME as string
     );
 
-    await PineconeStore.fromDocuments(docs, embeddings, { pineconeIndex });
+    await PineconeStore.fromDocuments(docs, embeddings, {
+      pineconeIndex,
+      namespace: authorId,
+    });
 
     // const texts = docs.map(({ pageContent }) => pageContent);
 

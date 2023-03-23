@@ -48,7 +48,7 @@ export default async function handler(
 
     const vectorStore = await PineconeStore.fromExistingIndex(
       new OpenAIEmbeddings(),
-      { pineconeIndex: index }
+      { pineconeIndex: index, namespace: authorId }
     );
 
     const model = new OpenAI();
