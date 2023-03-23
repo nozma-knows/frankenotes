@@ -1539,6 +1539,13 @@
     tslib "^2.4.1"
     webcrypto-core "^1.7.4"
 
+"@pinecone-database/pinecone@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@pinecone-database/pinecone/-/pinecone-0.0.11.tgz#de2130ff74206686b8f4d03cd8d5a48f807dad4c"
+  integrity sha512-mmIcmrFEiU8uqprexuCBpNvcVI2yef3JaVO5pbqEaeHmsLG6X805wUdBKv7JpE3EAr+2GSE/MO0ND+lLKWBuVg==
+  dependencies:
+    cross-fetch "^3.1.5"
+
 "@pkgr/utils@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@pkgr/utils/-/utils-2.3.1.tgz#0a9b06ffddee364d6642b3cd562ca76f55b34a03"
@@ -3883,6 +3890,11 @@ katex@^0.16.4:
   dependencies:
     commander "^8.0.0"
 
+ky@^0.33.1:
+  version "0.33.3"
+  resolved "https://registry.yarnpkg.com/ky/-/ky-0.33.3.tgz#bf1ad322a3f2c3428c13cfa4b3af95e6c4a2f543"
+  integrity sha512-CasD9OCEQSFIam2U8efFK81Yeg8vNMTBUqtMOHlrcWQHqUX3HeCl9Dr31u4toV7emlH8Mymk5+9p0lL6mKb/Xw==
+
 langchain@^0.0.36:
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.36.tgz#6dc67b84d1e543308259e58854815e0e08ef1413"
@@ -4508,6 +4520,13 @@ pify@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
   integrity sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==
+
+pinecone-client@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pinecone-client/-/pinecone-client-1.1.0.tgz#ad576fab2b3ef66dbc673ab868a5e852b82ccf88"
+  integrity sha512-+5kW2OwW/eo3W/MKIktEhRYwq1PwmZdxTOGi34WZbpbt0C4OpzjW2uUx92bdU2/EnUw/A9M870g3y/vAL1H2HA==
+  dependencies:
+    ky "^0.33.1"
 
 postcss-import@^14.1.0:
   version "14.1.0"

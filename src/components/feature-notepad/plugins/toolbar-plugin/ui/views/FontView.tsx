@@ -128,6 +128,7 @@ export default function FontView(props: FontViewProps) {
           buttonLabel=""
           buttonAriaLabel="Formatting options for additional text styles"
           Icon={BsType}
+          stopCloseOnClickSelf
         >
           {props.windowSize !== "lg" && (
             <>

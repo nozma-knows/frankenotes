@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { UpdateNoteMutation, CreateNoteMutation } from "@/components/graph";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -55,6 +55,14 @@ export default function LexicalEditor({
 }: LexicalEditorProps) {
   const [size, setSize] = useState("lg");
 
+  const [lastFileUpdate, setLastFileUpdate] = useState(
+    activeFile?.updatedAt || 0
+  );
+
+  const [lastVectorStoreUpdate, setLastVectorStoreUpdate] = useState(0);
+  const [resetInterval, setResetInterval] = useState(false);
+  const [updatedContent, setUpdatedContent] = useState(activeFile?.content);
+
   const windowSize = useWindowSize();
 
   useEffect(() => {
@@ -73,11 +81,66 @@ export default function LexicalEditor({
 
   const { historyState } = useEditorHistoryState();
 
+  const handleSaveToVectorStore = useCallback(
+    async ({ docId, doc }: { docId: string; doc: string }) => {
+      try {
+        const response = await fetch(`../api/save-to-vector-store`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            docId,
+            doc,
+            authorId,
+          }),
+        });
+        console.log(
+          "noah - lexical-editor - handleSaveToVectorStore - response: ",
+          response
+        );
+      } catch (error) {
+        console.error("Error submitting prompt: ", error);
+      }
+    },
+    [authorId]
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (
+        activeFile &&
+        updatedContent &&
+        Number(lastFileUpdate) > Number(lastVectorStoreUpdate)
+      ) {
+        setLastVectorStoreUpdate(new Date().valueOf());
+        handleSaveToVectorStore({
+          docId: activeFile.id,
+          doc: updatedContent,
+        });
+      }
+    }, 20000);
+    return () => {
+      // clean up
+      clearInterval(interval);
+      setResetInterval(!resetInterval);
+    };
+  }, [
+    activeFile,
+    handleSaveToVectorStore,
+    lastFileUpdate,
+    lastVectorStoreUpdate,
+    resetInterval,
+    updatedContent,
+  ]);
+
   const onChange = (
     data: EditorState,
     activeFile: Note | null,
     setMarkdownContent: (markdownContent: string) => void
   ) => {
+    setResetInterval(!resetInterval);
     const dataJSON = data.toJSON();
     const isEmpty = dataJSON.root.direction === null;
     if (!activeFile && !isEmpty) {
@@ -95,7 +158,9 @@ export default function LexicalEditor({
       setMarkdownContent(markdown);
       return markdown;
     });
+
     if (activeFile && updatedContent) {
+      setUpdatedContent(updatedContent);
       UpdateNote({ note: activeFile, updatedContent });
     }
   };
@@ -104,7 +169,6 @@ export default function LexicalEditor({
   const [createNote, { loading: loadingNote, error: errorGrabbingNote }] =
     useMutation(CreateNoteMutation, {
       onCompleted: (data: { createNote: Note }) => {
-        console.log("createNote: ", data.createNote);
         refetch();
         setActiveFile(data.createNote);
       },
@@ -128,7 +192,9 @@ export default function LexicalEditor({
     updateNote,
     { loading: loadingUpdateNote, error: errorUpdateingNote },
   ] = useMutation(UpdateNoteMutation, {
-    onCompleted: ({ updateNote }) => {},
+    onCompleted: ({ updateNote }) => {
+      setLastFileUpdate(updateNote.updatedAt);
+    },
     onError: () => console.log("error!"),
   });
 
