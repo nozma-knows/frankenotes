@@ -51,9 +51,11 @@ export default async function handler(
       { pineconeIndex: index, namespace: authorId }
     );
 
-    const model = new OpenAI();
+    const model = new OpenAI({
+      modelName: "gpt-3.5-turbo",
+    });
     const chain = VectorDBQAChain.fromLLM(model, vectorStore, {
-      k: 1,
+      k: 5,
       returnSourceDocuments: true,
     });
 
