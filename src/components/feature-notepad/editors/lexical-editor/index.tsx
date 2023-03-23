@@ -107,36 +107,37 @@ export default function LexicalEditor({
     [authorId]
   );
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log("Interval ended");
-  //     console.log("lastFileUpdate: ", Number(lastFileUpdate));
-  //     console.log("lastVectorStoreUpdate: ", Number(lastVectorStoreUpdate));
-  //     if (
-  //       activeFile &&
-  //       activeFile.content &&
-  //       Number(lastFileUpdate) > Number(lastVectorStoreUpdate)
-  //     ) {
-  //       setLastVectorStoreUpdate(new Date().valueOf());
-  //       handleIndexVectorStore({
-  //         docId: activeFile.id,
-  //         doc: updatedContent!,
-  //       });
-  //     }
-  //   }, 20000);
-  //   return () => {
-  //     // clean up
-  //     clearInterval(interval);
-  //     setResetInterval(!resetInterval);
-  //   };
-  // }, [
-  //   activeFile,
-  //   handleIndexVectorStore,
-  //   lastFileUpdate,
-  //   lastVectorStoreUpdate,
-  //   resetInterval,
-  //   updatedContent,
-  // ]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("Interval ended");
+      console.log("lastFileUpdate: ", Number(lastFileUpdate));
+      console.log("lastVectorStoreUpdate: ", Number(lastVectorStoreUpdate));
+      if (
+        activeFile &&
+        updatedContent &&
+        Number(lastFileUpdate) > Number(lastVectorStoreUpdate)
+      ) {
+        console.log("ABOUT TO UPDATE VECTOR STORE");
+        setLastVectorStoreUpdate(new Date().valueOf());
+        handleSaveToVectorStore({
+          docId: activeFile.id,
+          doc: updatedContent,
+        });
+      }
+    }, 20000);
+    return () => {
+      // clean up
+      clearInterval(interval);
+      setResetInterval(!resetInterval);
+    };
+  }, [
+    activeFile,
+    handleSaveToVectorStore,
+    lastFileUpdate,
+    lastVectorStoreUpdate,
+    resetInterval,
+    updatedContent,
+  ]);
 
   const onChange = (
     data: EditorState,
@@ -164,14 +165,10 @@ export default function LexicalEditor({
     });
 
     if (activeFile && updatedContent) {
-      // handleIndexVectorStore({
+      // handleSaveToVectorStore({
       //   docId: activeFile.id,
-      //   doc: updatedContent!,
+      //   doc: updatedContent,
       // });
-      handleSaveToVectorStore({
-        docId: activeFile.id,
-        doc: updatedContent,
-      });
       setUpdatedContent(updatedContent);
       UpdateNote({ note: activeFile, updatedContent });
     }
