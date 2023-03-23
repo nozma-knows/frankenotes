@@ -63,11 +63,6 @@ export default async function handler(
       process.env.PINECONE_INDEX_NAME as string
     );
 
-    // await PineconeStore.fromDocuments(docs, embeddings, {
-    //   pineconeIndex,
-    //   namespace: authorId,
-    // });
-
     const vectorStore = await PineconeStore.fromExistingIndex(
       new OpenAIEmbeddings(),
       { pineconeIndex, namespace: authorId }
@@ -75,29 +70,6 @@ export default async function handler(
     const docIds = docs.map((doc, index) => `${docId}-vector-${index + 1}`);
     console.log("docIds: ", docIds);
     vectorStore.addDocuments(docs, docIds);
-
-    // const index = pinecone.Index(process.env.PINECONE_INDEX_NAME as string);
-    // const texts = docs.map(({ pageContent }) => pageContent);
-
-    // const embeddedDocs = await embeddings.embedDocuments(texts);
-    // const vectors = embeddedDocs.map((doc, index) => {
-    //   return {
-    //     id: `${docId}-vector-${index + 1}`,
-    //     values: doc,
-    //   };
-    // });
-
-    // const upsertRequest = {
-    //   vectors,
-    //   namespace: authorId,
-    // };
-
-    // await index
-    //   .upsert({ upsertRequest })
-    //   .then(async (response) => {
-    //     console.log("index.upsert - response: ", response);
-    //   })
-    //   .catch((err) => console.log("index.upsert - error: ", err));
 
     res.status(200).json({
       message: "Successfully indexed vector store",

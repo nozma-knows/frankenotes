@@ -165,10 +165,6 @@ export default function LexicalEditor({
     });
 
     if (activeFile && updatedContent) {
-      // handleSaveToVectorStore({
-      //   docId: activeFile.id,
-      //   doc: updatedContent,
-      // });
       setUpdatedContent(updatedContent);
       UpdateNote({ note: activeFile, updatedContent });
     }
@@ -203,9 +199,7 @@ export default function LexicalEditor({
     { loading: loadingUpdateNote, error: errorUpdateingNote },
   ] = useMutation(UpdateNoteMutation, {
     onCompleted: ({ updateNote }) => {
-      console.log("updatedNote: ", updateNote);
       setLastFileUpdate(updateNote.updatedAt);
-      //
     },
     onError: () => console.log("error!"),
   });
