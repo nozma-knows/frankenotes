@@ -35,53 +35,81 @@ const addUserMessage = ({
 }: {
   query: string;
   CreateNotesQuery: (query: string) => void;
-  // messages: MessageType[];
-  // setMessages: (messages: MessageType[]) => void;
   setValue: any;
 }) => {
+  console.log("QUERY: ", query);
   CreateNotesQuery(query);
-  // setMessages([
-  //   ...messages,
-  //   {
-  //     message: query,
-  //     sender: "user",
-  //   },
-  // ]);
   setValue("query", "");
 };
 
-const handleQueryNotes = async ({
-  notes,
+// const handleQueryNotes = async ({
+//   notes,
+// notesQuery,
+// UpdateNotesQuery,
+// }: // messages,
+// // setMessages,
+// {
+//   notes: Note[] | undefined;
+//   notesQuery: NotesQuery;
+//   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
+//   // messages: { message: string; sender: string }[];
+//   // setMessages: (messages: { message: string; sender: string }[]) => void;
+// }) => {
+//   try {
+//     const content = notes
+//       ? notes.map((note) => {
+//           return {
+//             contents: note.content,
+//           };
+//         })
+//       : [];
+//     const response = await fetch(`../api/query-notes`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         notes: content,
+//         query: notesQuery.query,
+//       }),
+//     });
+//     const data = await response.json();
+//     UpdateNotesQuery(notesQuery, data.message);
+//   } catch (error) {
+//     console.error("Error submitting prompt: ", error);
+//   }
+// };
+
+const handleQueryVectorStore = async ({
+  authorId,
+  query,
   notesQuery,
   UpdateNotesQuery,
-}: // messages,
-// setMessages,
-{
-  notes: Note[] | undefined;
+}: {
+  authorId: string;
+  query: string;
   notesQuery: NotesQuery;
   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
-  // messages: { message: string; sender: string }[];
-  // setMessages: (messages: { message: string; sender: string }[]) => void;
 }) => {
   try {
-    const content = notes
-      ? notes.map((note) => {
-          return {
-            contents: note.content,
-          };
-        })
-      : [];
-    const response = await fetch(`../api/query-notes`, {
+    console.log("QueryNotesPopup - handleQueryVectorStore - props: ", {
+      authorId,
+      query,
+      notesQuery,
+      UpdateNotesQuery,
+    });
+    const response = await fetch(`../api/query-vector-store`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        notes: content,
-        query: notesQuery.query,
+        query,
+        authorId,
       }),
     });
     const data = await response.json();
+    console.log("data: ", data);
     UpdateNotesQuery(notesQuery, data.message);
   } catch (error) {
     console.error("Error submitting prompt: ", error);
@@ -127,8 +155,9 @@ export default function QueryNotesPopup({
     useMutation(CreateNotesQueryMutation, {
       onCompleted: (data: { createNotesQuery: NotesQuery }) => {
         refetchNotesQueries();
-        handleQueryNotes({
-          notes,
+        handleQueryVectorStore({
+          authorId,
+          query: data.createNotesQuery.query,
           notesQuery: data.createNotesQuery,
           UpdateNotesQuery,
         });
@@ -185,63 +214,8 @@ export default function QueryNotesPopup({
         status: notesQuery.status,
       };
     });
-    // return (
-    //   <Popup
-    //     title="Ask your notes a question!"
-    //     style={{
-    //       backgroundColor: "#061515",
-    //       color: "#e3d1e6",
-    //       display: "flex",
-    //       flexDirection: "column",
-    //       alignItems: "center",
-    //       borderRadius: "12px",
-    //       padding: "2rem",
-    //       width: screenSize.width > 1024 ? "65%" : "90%",
-    //       height: `100%`,
-    //     }}
-    //     onClose={onClose}
-    //   >
-    //     <div className="flex w-full h-full justify-center items-center overflow-hidden">
-    //       <form
-    //         className="flex w-full h-full"
-    //         onSubmit={handleSubmit(({ query }) =>
-    //           addUserMessage({
-    //             query,
-    //             CreateNotesQuery,
-    //             // messages,
-    //             // setMessages,
-    //             setValue,
-    //           })
-    //         )}
-    //         // onSubmit={handleSubmit(CreateNotesQuery(query))}
-    //       >
-    //         <div className="flex flex-col w-full px-8 gap-8">
-    //           <MessageContainer messages={messages} loading={loading} />
-    //           <div className="flex items-center gap-2">
-    //             <TextField
-    //               control={control}
-    //               name="query"
-    //               type="text"
-    //               placeholder={`${messages.length ? "" : "Ask a question!"}`}
-    //               required="Query is required."
-    //               errors={errors}
-    //             />
-    //             <div className="pb-5">
-    //               <Button
-    //                 label="Send"
-    //                 disabled={loading}
-    //                 className="flex py-2"
-    //               />
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </form>
-    //     </div>
-    //   </Popup>
-    // );
     return (
       <Popup
-        // title="Ask your notes a question!"
         style={{
           backgroundColor: "#061515",
           display: "flex",
@@ -268,12 +242,9 @@ export default function QueryNotesPopup({
                 addUserMessage({
                   query,
                   CreateNotesQuery,
-                  // messages,
-                  // setMessages,
                   setValue,
                 })
               )}
-              // onSubmit={handleSubmit(CreateNotesQuery(query))}
             >
               <div className="flex w-full px-4">
                 <div className="flex w-full gap-4">

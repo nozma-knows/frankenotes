@@ -125,6 +125,7 @@ export default function ColorPicker({
       buttonAriaLabel={buttonAriaLabel}
       Icon={Icon}
       buttonClassName={buttonClassName}
+      stopCloseOnClickSelf
     >
       <div
         className="flex flex-col w-full p-4 gap-2 justify-center "

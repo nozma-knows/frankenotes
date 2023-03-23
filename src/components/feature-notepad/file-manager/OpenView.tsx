@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, {
+  MouseEventHandler,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useMutation } from "@apollo/client";
 import { useForm, FieldValues } from "react-hook-form";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
@@ -107,8 +112,8 @@ const Topbar = ({
                 Icon={BsQuestionLg}
                 onClick={() => setShowQueryNotesPopup(true)}
                 label="Ask your notes a question"
-                disabled={true}
-                disabledMessage="Feature coming soon!"
+                // disabled={true}
+                // disabledMessage="Feature coming soon!"
               />
             </div>
           </div>

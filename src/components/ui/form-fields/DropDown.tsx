@@ -47,7 +47,7 @@ export function DropDownItem({
   return (
     <button
       className={`flex w-full items-center gap-2 px-2 hover:bg-[#d9f6f5] hover:text-[#58335e] rounded ${
-        active && "text-secondary-dark"
+        active && "text-secondary-dark hover:text-[#a56baf]"
       }`}
       onClick={onClick}
       ref={ref}

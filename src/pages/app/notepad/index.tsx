@@ -47,6 +47,47 @@ export default function Notepad({ token }: { token: string }) {
     variables: { authorId },
   });
 
+  // const handleQueryVectorStore = async ({ query }: { query: string }) => {
+  //   try {
+  //     const response = await fetch(`../api/query-vector-store`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         query,
+  //       }),
+  //     });
+  //     console.log("response: ", response);
+  //   } catch (error) {
+  //     console.error("Error submitting prompt: ", error);
+  //   }
+  // };
+
+  // const handleIndexVectorStore = async ({
+  //   // docId,
+  //   doc,
+  // }: {
+  //   // docId: string;
+  //   doc: string;
+  // }) => {
+  //   try {
+  //     const response = await fetch(`../api/index-vector-store`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         // docId,
+  //         doc,
+  //         // authorId,
+  //       }),
+  //     });
+  //   } catch (error) {
+  //     console.error("Error submitting prompt: ", error);
+  //   }
+  // };
+
   if (loading) {
     return <div>Loading Page...</div>;
   }
@@ -55,6 +96,8 @@ export default function Notepad({ token }: { token: string }) {
     return <div>Error Page...</div>;
   }
   if (data && authorId) {
+    // handleIndexVectorStore({ doc: "My name is Noah, and I love to code." });
+    // handleQueryVectorStore({ query: "Tell me something Noah likes." });
     return (
       <Page hideTopbar>
         <div className="flex flex-col sm:flex-row gap-2 p-2 w-full">
