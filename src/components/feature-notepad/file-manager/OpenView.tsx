@@ -205,6 +205,33 @@ export default function OpenView({
   setFileManagerOpen,
 }: OpenViewProps) {
   const size = useWindowSize();
+
+  const handleDeleteFromVectorStore = useCallback(
+    async ({ docId, doc }: { docId: string; doc: string }) => {
+      try {
+        const response = await fetch(`../api/delete-from-vectore-store`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            docId,
+            doc,
+            authorId,
+          }),
+        });
+        console.log(
+          "noah - lexical-editor - handleSaveToVectorStore - response: ",
+          response
+        );
+      } catch (error) {
+        console.error("Error submitting prompt: ", error);
+      }
+    },
+    [authorId]
+  );
+
   // useMutaiton call for creating a note
   const [createNote, { loading: loadingNote, error: errorGrabbingNote }] =
     useMutation(CreateNoteMutation, {
@@ -232,6 +259,12 @@ export default function OpenView({
   const [deleteNote, { loading: deletingNote, error: errorDeletingNote }] =
     useMutation(DeleteNoteMutation, {
       onCompleted: (data: { deleteNote: Note }) => {
+        handleDeleteFromVectorStore({
+          docId: data.deleteNote.id as string,
+          doc: data.deleteNote.content as string,
+        });
+        console.log("deletedNote: ", data.deleteNote);
+
         refetch();
         if (data.deleteNote.id === activeNote?.id) {
           setActiveNote(null);
