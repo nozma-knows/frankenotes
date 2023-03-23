@@ -221,10 +221,6 @@ export default function OpenView({
             authorId,
           }),
         });
-        console.log(
-          "noah - lexical-editor - handleSaveToVectorStore - response: ",
-          response
-        );
       } catch (error) {
         console.error("Error submitting prompt: ", error);
       }
@@ -263,7 +259,6 @@ export default function OpenView({
           docId: data.deleteNote.id as string,
           doc: data.deleteNote.content as string,
         });
-        console.log("deletedNote: ", data.deleteNote);
 
         refetch();
         if (data.deleteNote.id === activeNote?.id) {

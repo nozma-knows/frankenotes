@@ -39,20 +39,12 @@ export default async function handler(
       });
     }
 
-    console.log("delete-form-vectore-store - props: ", {
-      docId,
-      doc,
-      authorId,
-    });
-
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 20,
     });
 
     const numberOfVectors = (await splitter.createDocuments([doc])).length;
-
-    console.log("numberOfVectors: ", numberOfVectors);
 
     const pinecone = new PineconeClient();
     await pinecone.init({
@@ -69,8 +61,6 @@ export default async function handler(
     for (var i = 0; i < numberOfVectors; i += 1) {
       vectorIds.push(`${docId}-vector-${i + 1}`);
     }
-
-    console.log("vectorIds: ", vectorIds);
 
     await pineconeIndex.delete1({
       ids: vectorIds,

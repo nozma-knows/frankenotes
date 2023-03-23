@@ -109,15 +109,11 @@ export default function LexicalEditor({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("Interval ended");
-      console.log("lastFileUpdate: ", Number(lastFileUpdate));
-      console.log("lastVectorStoreUpdate: ", Number(lastVectorStoreUpdate));
       if (
         activeFile &&
         updatedContent &&
         Number(lastFileUpdate) > Number(lastVectorStoreUpdate)
       ) {
-        console.log("ABOUT TO UPDATE VECTOR STORE");
         setLastVectorStoreUpdate(new Date().valueOf());
         handleSaveToVectorStore({
           docId: activeFile.id,
@@ -144,7 +140,6 @@ export default function LexicalEditor({
     activeFile: Note | null,
     setMarkdownContent: (markdownContent: string) => void
   ) => {
-    console.log("activeFile: ", activeFile);
     setResetInterval(!resetInterval);
     const dataJSON = data.toJSON();
     const isEmpty = dataJSON.root.direction === null;
@@ -174,7 +169,6 @@ export default function LexicalEditor({
   const [createNote, { loading: loadingNote, error: errorGrabbingNote }] =
     useMutation(CreateNoteMutation, {
       onCompleted: (data: { createNote: Note }) => {
-        console.log("createNote: ", data.createNote);
         refetch();
         setActiveFile(data.createNote);
       },

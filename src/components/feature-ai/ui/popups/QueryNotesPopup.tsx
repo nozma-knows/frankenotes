@@ -7,9 +7,7 @@ import {
   NotesQueriesQuery,
 } from "@/components/graph";
 import { Note, NotesQuery } from "@/__generated__/graphql";
-// import TextField from "@/components/ui/form-fields/TextField";
 import NoStyleTextfield from "@/components/ui/form-fields/NoStyleTextField";
-import Button from "@/components/ui/buttons/Button";
 import Popup from "@/components/ui/popups/Popup";
 import MessageContainer from "../MessageContainer";
 import useWindowSize from "@/components/utils/hooks/useWindowSize";
@@ -29,56 +27,15 @@ type MessageType = {
 const addUserMessage = ({
   query,
   CreateNotesQuery,
-  // messages,
-  // setMessages,
   setValue,
 }: {
   query: string;
   CreateNotesQuery: (query: string) => void;
   setValue: any;
 }) => {
-  console.log("QUERY: ", query);
   CreateNotesQuery(query);
   setValue("query", "");
 };
-
-// const handleQueryNotes = async ({
-//   notes,
-// notesQuery,
-// UpdateNotesQuery,
-// }: // messages,
-// // setMessages,
-// {
-//   notes: Note[] | undefined;
-//   notesQuery: NotesQuery;
-//   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
-//   // messages: { message: string; sender: string }[];
-//   // setMessages: (messages: { message: string; sender: string }[]) => void;
-// }) => {
-//   try {
-//     const content = notes
-//       ? notes.map((note) => {
-//           return {
-//             contents: note.content,
-//           };
-//         })
-//       : [];
-//     const response = await fetch(`../api/query-notes`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         notes: content,
-//         query: notesQuery.query,
-//       }),
-//     });
-//     const data = await response.json();
-//     UpdateNotesQuery(notesQuery, data.message);
-//   } catch (error) {
-//     console.error("Error submitting prompt: ", error);
-//   }
-// };
 
 const handleQueryVectorStore = async ({
   authorId,
@@ -92,12 +49,6 @@ const handleQueryVectorStore = async ({
   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
 }) => {
   try {
-    console.log("QueryNotesPopup - handleQueryVectorStore - props: ", {
-      authorId,
-      query,
-      notesQuery,
-      UpdateNotesQuery,
-    });
     const response = await fetch(`../api/query-vector-store`, {
       method: "POST",
       headers: {
@@ -109,7 +60,6 @@ const handleQueryVectorStore = async ({
       }),
     });
     const data = await response.json();
-    console.log("data: ", data);
     UpdateNotesQuery(notesQuery, data.message);
   } catch (error) {
     console.error("Error submitting prompt: ", error);

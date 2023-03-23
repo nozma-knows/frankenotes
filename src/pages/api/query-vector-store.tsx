@@ -60,7 +60,6 @@ export default async function handler(
     });
 
     const response = await chain.call({ query });
-    console.log(response);
 
     res.status(200).json({
       message: response.text,

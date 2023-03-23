@@ -38,8 +38,6 @@ export default async function handler(
       });
     }
 
-    console.log("doc: ", doc);
-
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 20,
@@ -68,7 +66,6 @@ export default async function handler(
       { pineconeIndex, namespace: authorId }
     );
     const docIds = docs.map((doc, index) => `${docId}-vector-${index + 1}`);
-    console.log("docIds: ", docIds);
     vectorStore.addDocuments(docs, docIds);
 
     res.status(200).json({
