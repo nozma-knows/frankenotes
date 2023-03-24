@@ -35,6 +35,7 @@ const AppLogo = ({ size }: { size: { width: number; height: number } }) => {
 
 export default function Notepad({ token }: { token: string }) {
   console.log("ENV VARS: ", {
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     NEXT_PUBLIC_PINECONE_API_KEY: process.env.NEXT_PUBLIC_PINECONE_API_KEY,
     NEXT_PUBLIC_PINECONE_ENVIRONMENT:
       process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT,
