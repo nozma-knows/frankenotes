@@ -40,11 +40,13 @@ export default async function handler(
 
     const pinecone = new PineconeClient();
     await pinecone.init({
-      apiKey: process.env.PINECONE_API_KEY as string,
-      environment: process.env.PINECONE_ENVIRONMENT as string,
+      apiKey: process.env.NEXT_PUBLIC_PINECONE_API_KEY as string,
+      environment: process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT as string,
     });
 
-    const index = pinecone.Index(process.env.PINECONE_INDEX_NAME as string);
+    const index = pinecone.Index(
+      process.env.NEXT_PUBLIC_PINECONE_INDEX_NAME as string
+    );
 
     const vectorStore = await PineconeStore.fromExistingIndex(
       new OpenAIEmbeddings(),
