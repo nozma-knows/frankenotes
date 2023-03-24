@@ -20,7 +20,7 @@ interface GenerateNextApiRequest extends NextApiRequest {
 
 // Initalize the wrapper
 const model = new OpenAI({
-  openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 0.9,
 });
 
