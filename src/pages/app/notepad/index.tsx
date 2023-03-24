@@ -34,6 +34,11 @@ const AppLogo = ({ size }: { size: { width: number; height: number } }) => {
 };
 
 export default function Notepad({ token }: { token: string }) {
+  console.log("ENV VARS: ", {
+    NEXT_PUBLIC_PINECONE_API_KEY: process.env.NEXT_PUBLIC_PINECONE_API_KEY,
+    NEXT_PUBLIC_PINECONE_ENVIRONMENT:
+      process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT,
+  });
   const decodedToken = DecodeToken({ token });
   const [activeNote, setActiveNote] = useState<Note | null>(null);
 

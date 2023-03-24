@@ -49,12 +49,6 @@ export default async function handler(
 
     const docs = await loadDocs();
 
-    console.log("ENV VARS: ", {
-      NEXT_PUBLIC_PINECONE_API_KEY: process.env.NEXT_PUBLIC_PINECONE_API_KEY,
-      NEXT_PUBLIC_PINECONE_ENVIRONMENT:
-        process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT,
-    });
-
     const embeddings = new OpenAIEmbeddings();
     const pinecone = new PineconeClient();
     await pinecone.init({
