@@ -7,6 +7,8 @@ import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
+import { TRANSFORMERS } from "@lexical/markdown";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import SaveToDBPlugin from "../plugins/save-to-db";
 import { EditorState } from "lexical";
 import { Note } from "@/__generated__/graphql";
@@ -43,6 +45,7 @@ export default function TextEditor() {
       />
       <ClearEditorPlugin />
       <HistoryPlugin externalHistoryState={historyState} />
+      <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <SpeechToTextPlugin />
       <TabIndentationPlugin />
       <OnChangePlugin
