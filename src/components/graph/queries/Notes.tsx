@@ -8,7 +8,7 @@ const notesDocument = gql`
       updatedAt
       authorId
       title
-      content
+      editorState
     }
   }
 `;

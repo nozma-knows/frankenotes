@@ -4,14 +4,13 @@ import { parse } from "cookie";
 import { Note } from "@/__generated__/graphql";
 import { NotesQuery } from "@/components/graph";
 import Page from "@/components/ui/pages/Page";
-import Editor from "@/components/feature-notepad/Editor";
 import DecodeToken from "@/components/utils/conversion/DecodeToken";
-import FileManager from "@/components/feature-notepad/file-manager";
 import useWindowSize, {
   smScreenMax,
 } from "@/components/utils/hooks/useWindowSize";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
+import Editor from "@/components/feature-notepad/Editor";
 
 const title = `Frankenotes`;
 
@@ -42,22 +41,28 @@ export default function Notepad({ token }: { token: string }) {
 
   const size = useWindowSize();
 
-  // Grab users notes
+  // Grab notes from db
   const { loading, error, data, refetch } = useQuery(NotesQuery, {
     variables: { authorId },
   });
 
+  // Loading view
   if (loading) {
     return <div>Loading Page...</div>;
   }
 
+  // Error view
   if (error) {
     return <div>Error Page...</div>;
   }
+
+  // Loaded view
   if (data && authorId) {
+    console.log("data: ", data);
+    console.log("authorId: ", authorId);
     return (
       <Page hideTopbar>
-        <div>Notepad</div>
+        <Editor />
       </Page>
     );
   }
