@@ -44,7 +44,7 @@ export default function DetailsPlugin() {
   const { activeNote, setActiveNote } = useContext(NoteContext);
 
   return (
-    <div className="flex w-full h-32 gap-2 px-2">
+    <div className="flex w-full h-32 gap-">
       <DetailsView activeNote={activeNote} setActiveNote={setActiveNote} />
     </div>
   );

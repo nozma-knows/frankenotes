@@ -165,6 +165,8 @@ export default function FileManager() {
     setFileManagerOpen,
   } = useContext(NoteContext);
 
+  const [editor] = useLexicalComposerContext();
+
   // Create note mutation
   const [createNote] = useMutation(CreateNoteMutation, {
     onCompleted: (data: { createNote: Note }) => {
@@ -207,13 +209,9 @@ export default function FileManager() {
     });
   };
 
-  useEffect(() => {
-    console.log("FileManager.tsx - activeNote: ", activeNote);
-  }, [activeNote]);
-
   return (
-    <div className="flex w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] bg-red-400 max-h-72 sm:max-h-none">
-      <div className="flex flex-col w-full h-full bg-main-light rounded-xl overflow-hidden">
+    <div className="flex w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] max-h-72 sm:max-h-none">
+      <div className="flex flex-col w-full h-full bg-main-light rounded-lg overflow-hidden">
         <FileManagerTopbar
           size={size}
           authorId={authorId}

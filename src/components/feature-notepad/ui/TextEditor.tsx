@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import NoteContext from "../context/useNoteContext";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -26,7 +26,7 @@ export default function TextEditor() {
   const { activeNote, setActiveNote } = useContext(NoteContext);
 
   return (
-    <div className="flex w-full h-full bg-blue-400">
+    <div className="flex flex-col w-full h-full rounded-lg p-2  bg-main-light">
       <DetailsPlugin />
       <RichTextPlugin
         contentEditable={
