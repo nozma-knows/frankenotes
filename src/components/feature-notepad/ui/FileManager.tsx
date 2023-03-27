@@ -10,7 +10,7 @@ import { Note } from "@/__generated__/graphql";
 import NoteContext from "../context/useNoteContext";
 import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { LexicalEditor } from "lexical";
+import { $getRoot, LexicalEditor } from "lexical";
 
 const emptyEditorState =
   '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
@@ -44,12 +44,14 @@ const FileManagerTopbarButton = ({
 };
 
 const FileManagerTopbar = ({
+  editor,
   size,
   authorId,
   notes,
   CreateNote,
   setFileManagerOpen,
 }: {
+  editor: LexicalEditor;
   size: string;
   authorId: string;
   notes: Note[];
@@ -57,6 +59,9 @@ const FileManagerTopbar = ({
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
 }) => {
   const createNewNote = () => {
+    editor.update(() => {
+      $getRoot().clear();
+    });
     CreateNote();
   };
 
@@ -213,6 +218,7 @@ export default function FileManager() {
     <div className="flex w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] max-h-72 sm:max-h-none">
       <div className="flex flex-col w-full h-full bg-main-light rounded-lg overflow-hidden">
         <FileManagerTopbar
+          editor={editor}
           size={size}
           authorId={authorId}
           notes={notes}
