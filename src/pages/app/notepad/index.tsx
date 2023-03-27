@@ -57,33 +57,7 @@ export default function Notepad({ token }: { token: string }) {
   if (data && authorId) {
     return (
       <Page hideTopbar>
-        <div className="flex flex-col sm:flex-row gap-2 p-2 w-full">
-          {fileManagerOpen && (
-            <div className="flex w-full h-1/3 sm:h-full order-last sm:order-none sm:max-w-[15rem] md:max-w-xs 2xl:max-w-sm">
-              <div className="flex w-full flex-col">
-                {size.width >= smScreenMax && <AppLogo size={size} />}
-                <FileManager
-                  files={data.notes}
-                  authorId={authorId}
-                  activeNote={activeNote}
-                  setActiveNote={setActiveNote}
-                  refetch={refetch}
-                  setFileManagerOpen={setFileManagerOpen}
-                />
-              </div>
-            </div>
-          )}
-          <div className="flex flex-1">
-            <Editor
-              activeFile={activeNote}
-              setActiveFile={setActiveNote}
-              authorId={authorId}
-              refetch={refetch}
-              fileManagerOpen={fileManagerOpen}
-              setFileManagerOpen={setFileManagerOpen}
-            />
-          </div>
-        </div>
+        <div>Notepad</div>
       </Page>
     );
   }
