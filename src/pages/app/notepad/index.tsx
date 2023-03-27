@@ -7,10 +7,13 @@ import Page from "@/components/ui/pages/Page";
 import DecodeToken from "@/components/utils/conversion/DecodeToken";
 import useWindowSize, {
   smScreenMax,
+  mdScreenMax,
+  lgScreenMax,
 } from "@/components/utils/hooks/useWindowSize";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
 import Editor from "@/components/feature-notepad/Editor";
+import NoteContext from "@/components/feature-notepad/context/useNoteContext";
 
 const title = `Frankenotes`;
 
@@ -39,7 +42,22 @@ export default function Notepad({ token }: { token: string }) {
   const authorId = decodedToken?.userId;
   const [fileManagerOpen, setFileManagerOpen] = useState(true);
 
-  const size = useWindowSize();
+  const windowSize = useWindowSize();
+  const [size, setSize] = useState("lg");
+
+  useEffect(() => {
+    const { width } = windowSize;
+    if (width >= lgScreenMax || (width >= mdScreenMax && !fileManagerOpen)) {
+      setSize("lg");
+    } else if (
+      width >= mdScreenMax ||
+      (width >= smScreenMax && !fileManagerOpen)
+    ) {
+      setSize("md");
+    } else {
+      setSize("sm");
+    }
+  }, [fileManagerOpen, size, windowSize]);
 
   // Grab notes from db
   const { loading, error, data, refetch } = useQuery(NotesQuery, {
@@ -58,12 +76,25 @@ export default function Notepad({ token }: { token: string }) {
 
   // Loaded view
   if (data && authorId) {
-    console.log("data: ", data);
-    console.log("authorId: ", authorId);
     return (
-      <Page hideTopbar>
-        <Editor />
-      </Page>
+      <NoteContext.Provider
+        value={{
+          authorId,
+          size,
+          activeNote,
+          setActiveNote,
+          notes: data.notes,
+          loadingNotes: loading,
+          errorGrabbingNotes: error,
+          refetchNotes: refetch,
+          fileManagerOpen,
+          setFileManagerOpen,
+        }}
+      >
+        <Page hideTopbar>
+          <Editor />
+        </Page>
+      </NoteContext.Provider>
     );
   }
 }

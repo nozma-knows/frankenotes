@@ -1,21 +1,32 @@
-import { MouseEventHandler, useContext, useEffect } from "react";
+import React, { useContext, MouseEventHandler } from "react";
 import { useMutation } from "@apollo/client";
-import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Tooltip } from "@mui/material";
 import { IconType } from "react-icons";
 import { BsThreeDots, BsTrash } from "react-icons/bs";
-import { BsPlusLg, BsChevronLeft, BsChevronDown } from "react-icons/bs";
-import { smScreenMax } from "@/components/utils/hooks/useWindowSize";
+import {
+  BsQuestionLg,
+  BsSearch,
+  BsPlusLg,
+  BsChevronLeft,
+  BsChevronDown,
+} from "react-icons/bs";
+import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
+import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
 import { Note } from "@/__generated__/graphql";
 import NoteContext from "../context/useNoteContext";
-import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { LexicalEditor } from "lexical";
+import { smScreenMax } from "@/components/utils/hooks/useWindowSize";
+import useWindowSize from "@/components/utils/hooks/useWindowSize";
+import { EditorState } from "lexical";
 
 const emptyEditorState =
   '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+interface FileManagerProps {
+  files: Note[];
+  authorId: string;
+}
 
-const FileManagerTopbarButton = ({
+// File Manager - Topbar Button Component
+const TopbarButton = ({
   Icon,
   onClick,
   label,
@@ -43,14 +54,15 @@ const FileManagerTopbarButton = ({
   );
 };
 
-const FileManagerTopbar = ({
+// File Manager - Topbar Component
+const Topbar = ({
   size,
   authorId,
   notes,
   CreateNote,
   setFileManagerOpen,
 }: {
-  size: string;
+  size: { width: number; height: number };
   authorId: string;
   notes: Note[];
   CreateNote: any;
@@ -66,21 +78,32 @@ const FileManagerTopbar = ({
         <div className="flex w-full gap-1 justify-between items-center text-main-dark">
           <div className="flex gap-1 sm:gap-4">
             <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-              <FileManagerTopbarButton
+              <TopbarButton
+                Icon={BsSearch}
+                onClick={() => console.log("search pressed.")}
+                label="Search notes"
+                disabled={true}
+                disabledMessage="Feature coming soon!"
+              />
+            </div>
+          </div>
+          <div className="flex gap-1 sm:gap-4">
+            <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+              <TopbarButton
                 Icon={BsPlusLg}
                 onClick={() => createNewNote()}
                 label="Create a new note"
               />
             </div>
             <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
-              {size != "sm" ? (
-                <FileManagerTopbarButton
+              {size.width >= smScreenMax ? (
+                <TopbarButton
                   Icon={BsChevronLeft}
                   onClick={() => setFileManagerOpen(false)}
                   label="Close file manager"
                 />
               ) : (
-                <FileManagerTopbarButton
+                <TopbarButton
                   Icon={BsChevronDown}
                   onClick={() => setFileManagerOpen(false)}
                   label="Close file manager"
@@ -94,31 +117,34 @@ const FileManagerTopbar = ({
   );
 };
 
-const handleUpdateActiveNote = (
-  note: Note,
-  setActiveNote: (activeNote: Note | null) => void,
-  editor: LexicalEditor
-) => {
-  editor.setEditorState(editor.parseEditorState(note.editorState));
-  setActiveNote(note);
-};
-
+// Props passed into FilePreview
 interface FilePreviewProps {
-  note: Note;
+  file: Note;
   isActive: boolean;
-  setActiveNote: (activeNote: Note | null) => void;
+  setActiveFile: (activeNote: Note | null) => void;
   DeleteNote: ({ note }: { note: Note }) => void;
 }
 
-const FilePreview = ({
-  note,
-  isActive,
-  setActiveNote,
-  DeleteNote,
-}: FilePreviewProps) => {
-  const { title, updatedAt } = note;
-  const [editor] = useLexicalComposerContext();
+const handleUpdateActiveFile = ({
+  file,
+  setActiveFile,
+}: {
+  file: Note;
+  setActiveFile: (file: Note) => void;
+}) => {
+  setActiveFile(file);
+};
 
+//
+const FilePreview = ({
+  file,
+  isActive,
+  setActiveFile,
+  DeleteNote,
+}: // editorState,
+// setEditorState,
+FilePreviewProps) => {
+  const { title, updatedAt } = file;
   return (
     <div className="flex items-center justify-between px-2 my-0.5">
       <div
@@ -128,7 +154,14 @@ const FilePreview = ({
       >
         <div
           className="truncate pr-4 w-full"
-          onClick={() => handleUpdateActiveNote(note, setActiveNote, editor)}
+          onClick={() =>
+            handleUpdateActiveFile({
+              file,
+              setActiveFile,
+              // editorState,
+              // setEditorState,
+            })
+          }
         >
           {title || "Untitled"}
         </div>
@@ -143,7 +176,7 @@ const FilePreview = ({
           round
         >
           <DropDownItem
-            onClick={() => DeleteNote({ note })}
+            onClick={() => DeleteNote({ note: file })}
             Icon={BsTrash}
             label="Delete Note"
           />
@@ -153,16 +186,15 @@ const FilePreview = ({
   );
 };
 
-export default function FileManager() {
-  // Grab values from note context
+export default function FileManager({ files, authorId }: FileManagerProps) {
+  const size = useWindowSize();
   const {
-    authorId,
-    size,
-    notes,
-    refetchNotes,
     activeNote,
     setActiveNote,
+    refetchNotes,
     setFileManagerOpen,
+    // editorState,
+    // setEditorState,
   } = useContext(NoteContext);
 
   // Create note mutation
@@ -188,15 +220,16 @@ export default function FileManager() {
   };
 
   // Delete note mutation
-  const [deleteNote] = useMutation(DeleteNoteMutation, {
-    onCompleted: (data: { deleteNote: Note }) => {
-      refetchNotes();
-      if (data.deleteNote.id === activeNote?.id) {
-        setActiveNote(null);
-      }
-    },
-    onError: () => console.log("error!"),
-  });
+  const [deleteNote, { loading: deletingNote, error: errorDeletingNote }] =
+    useMutation(DeleteNoteMutation, {
+      onCompleted: (data: { deleteNote: Note }) => {
+        refetchNotes();
+        if (data.deleteNote.id === activeNote?.id) {
+          setActiveNote(null);
+        }
+      },
+      onError: () => console.log("error!"),
+    });
 
   // Function for calling delete note mutation
   const DeleteNote = ({ note }: { note: Note }) => {
@@ -207,33 +240,29 @@ export default function FileManager() {
     });
   };
 
-  useEffect(() => {
-    console.log("FileManager.tsx - activeNote: ", activeNote);
-  }, [activeNote]);
-
   return (
-    <div className="flex w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] bg-red-400 max-h-72 sm:max-h-none">
-      <div className="flex flex-col w-full h-full bg-main-light rounded-xl overflow-hidden">
-        <FileManagerTopbar
-          size={size}
-          authorId={authorId}
-          notes={notes}
-          CreateNote={CreateNote}
-          setFileManagerOpen={setFileManagerOpen}
-        />
-        <div className="flex flex-col overflow-auto">
-          {notes.map((note: Note, index: number) => {
-            return (
-              <FilePreview
-                key={index}
-                note={note}
-                isActive={activeNote ? activeNote.id === note.id : false}
-                setActiveNote={setActiveNote}
-                DeleteNote={DeleteNote}
-              />
-            );
-          })}
-        </div>
+    <div className="flex flex-col w-full h-full bg-main-light rounded-xl overflow-hidden">
+      <Topbar
+        size={size}
+        authorId={authorId}
+        notes={files}
+        CreateNote={CreateNote}
+        setFileManagerOpen={setFileManagerOpen}
+      />
+      <div className="flex flex-col overflow-auto">
+        {files.map((file: Note, index: number) => {
+          return (
+            <FilePreview
+              key={index}
+              file={file}
+              isActive={activeNote ? activeNote.id === file.id : false}
+              setActiveFile={setActiveNote}
+              DeleteNote={DeleteNote}
+              // editorState={editorState}
+              // setEditorState={setEditorState}
+            />
+          );
+        })}
       </div>
     </div>
   );
