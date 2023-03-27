@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import NoteContext from "./context/useNoteContext";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import TextEditor from "./ui/TextEditor";
@@ -20,10 +20,6 @@ export default function Editor() {
   };
 
   const { activeNote } = useContext(NoteContext);
-
-  useEffect(() => {
-    console.log("activeNote: ", activeNote);
-  }, [activeNote]);
 
   return (
     <LexicalComposer initialConfig={initialConfig}>

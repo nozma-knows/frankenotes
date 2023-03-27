@@ -123,14 +123,20 @@ interface FilePreviewProps {
   isActive: boolean;
   setActiveFile: (activeNote: Note | null) => void;
   DeleteNote: ({ note }: { note: Note }) => void;
+  // editorState: EditorState;
+  // setEditorState: (editorState: EditorState) => void;
 }
 
 const handleUpdateActiveFile = ({
   file,
   setActiveFile,
-}: {
+}: // editorState,
+// setEditorState,
+{
   file: Note;
   setActiveFile: (file: Note) => void;
+  // editorState: EditorState;
+  // setEditorState: (editorState: EditorState) => void;
 }) => {
   setActiveFile(file);
 };
