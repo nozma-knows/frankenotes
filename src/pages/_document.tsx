@@ -1,6 +1,10 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
+  console.log(
+    "_document.tsx - process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ",
+    process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+  );
   return (
     <Html lang="en">
       <Head>
