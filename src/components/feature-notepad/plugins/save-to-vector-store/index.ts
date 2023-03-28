@@ -21,18 +21,20 @@ export default function SaveToDBPlugin() {
   const handleSaveToVectorStore = useCallback(
     async ({ docId, doc }: { docId: string; doc: string }) => {
       try {
-        const response = await fetch(`../api/save-to-vector-store`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            docId,
-            doc,
-            authorId,
-          }),
-        });
+        if (doc) {
+          const response = await fetch(`../api/save-to-vector-store`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              docId,
+              doc,
+              authorId,
+            }),
+          });
+        }
       } catch (error) {
         console.error("Error submitting prompt: ", error);
       }
