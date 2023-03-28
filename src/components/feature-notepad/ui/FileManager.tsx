@@ -11,6 +11,10 @@ import NoteContext from "../context/useNoteContext";
 import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getRoot, LexicalEditor } from "lexical";
+import Logo from "@/components/ui/icons/Logo";
+import FrankenotesLogo from "@/icons/logo.svg";
+
+const title = `Frankenotes`;
 
 const emptyEditorState =
   '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
@@ -215,7 +219,10 @@ export default function FileManager() {
   };
 
   return (
-    <div className="flex w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] max-h-72 sm:max-h-none">
+    <div className="flex flex-col w-full h-full sm:order-first sm:max-w-[16rem] md:max-w-[21rem] max-h-72 sm:max-h-none">
+      <div className="hidden sm:flex justify-center p-2 pb-4">
+        <Logo Icon={FrankenotesLogo} text={title} />
+      </div>
       <div className="flex flex-col w-full h-full bg-main-light rounded-lg overflow-hidden">
         <FileManagerTopbar
           editor={editor}
