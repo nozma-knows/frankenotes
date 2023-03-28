@@ -5,6 +5,11 @@ const title = `AI powered notebook.`;
 const subtitle = `Revolutionize the way you capture, access, and manage your thoughts.`;
 // const subtitle = `The tool for interacting with `;
 
+console.log(
+  "pages/index - process.env.NEXT_PUBLIC_SLACK_BOT_TOKEN: ",
+  process.env.NEXT_PUBLIC_SLACK_BOT_TOKEN
+);
+
 export default function Home() {
   return (
     <Page>
