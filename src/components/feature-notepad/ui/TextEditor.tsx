@@ -46,7 +46,7 @@ export default function TextEditor() {
       <DetailsPlugin />
       <RichTextPlugin
         contentEditable={
-          <ContentEditable className="flex h-full p-4 max-h-min flex-col w-full outline-none overflow-y-auto text-main-light editor" />
+          <ContentEditable className="flex h-full py-4 px-2 max-h-min flex-col w-full outline-none overflow-y-auto text-main-light editor" />
         }
         placeholder={<div></div>}
         ErrorBoundary={LexicalErrorBoundary}
