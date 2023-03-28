@@ -1,8 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import NoteContext from "../../context/useNoteContext";
+import {
+  FormatDateShort,
+  FormatDateTimeLong,
+} from "@/components/utils/conversion/FormatDate";
 
 export default function DetailsView() {
-  const { activeNote, setActiveNote } = useContext(NoteContext);
+  const { activeNote, setActiveNote, size } = useContext(NoteContext);
 
   const [title, setTitle] = useState(
     activeNote && activeNote.title ? activeNote.title : ""
@@ -29,6 +33,41 @@ export default function DetailsView() {
               setActiveNote({ ...activeNote, title: title })
             }
           />
+          <div className="flex gap-2 text-xl text-main-dark">
+            <div className="font-bold">
+              <div>Created</div>
+              <div>Updated</div>
+            </div>
+            <div>
+              {["md", "lg", "xl"].includes(size) ? (
+                <>
+                  <div>
+                    {FormatDateTimeLong({
+                      date: new Date(Number(activeNote.createdAt)),
+                    })}
+                  </div>
+                  <div>
+                    {FormatDateTimeLong({
+                      date: new Date(Number(activeNote.updatedAt)),
+                    })}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    {FormatDateShort({
+                      date: new Date(Number(activeNote.createdAt)),
+                    })}
+                  </div>
+                  <div>
+                    {FormatDateShort({
+                      date: new Date(Number(activeNote.updatedAt)),
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
