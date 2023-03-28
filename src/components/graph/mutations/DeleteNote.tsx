@@ -4,7 +4,7 @@ const deleteNoteDocument = gql`
   mutation DeleteNote($id: String!) {
     deleteNote(id: $id) {
       id
-      content
+      editorState
     }
   }
 `;

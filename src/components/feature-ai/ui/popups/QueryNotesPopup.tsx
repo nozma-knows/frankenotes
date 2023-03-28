@@ -12,6 +12,7 @@ import Popup from "@/components/ui/popups/Popup";
 import MessageContainer from "../MessageContainer";
 import useWindowSize from "@/components/utils/hooks/useWindowSize";
 import { BsFillSendFill } from "react-icons/bs";
+import PulseLoader from "react-spinners/PulseLoader";
 
 interface QueryNotesPopupProps {
   notes: Note[] | undefined;
@@ -149,11 +150,79 @@ export default function QueryNotesPopup({
   });
 
   if (notesQueriesLoading) {
-    return <div>Loading Page...</div>;
+    return (
+      <Popup
+        style={{
+          backgroundColor: "#061515",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          borderRadius: "12px",
+          padding: "1rem",
+          width: screenSize.width > 1024 ? "65%" : "90%",
+          height: `100%`,
+        }}
+        onClose={onClose}
+      >
+        <div className="flex flex-col w-full h-full rounded-lg p-4 gap-4 bg-main-light">
+          <div className="flex w-full justify-center p-4">
+            <div className="text-4xl font-bold">Ask your notes a question!</div>
+          </div>
+          <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+            <PulseLoader color="#58335e" size={40} />
+          </div>
+          <div className="flex w-full items-center h-24 bg-main-dark text-main-dark rounded-lg">
+            <div className="flex w-full px-4">
+              <div className="flex w-full gap-4">
+                <div className="flex w-full h-full items-center">
+                  <NoStyleTextfield
+                    control={control}
+                    name="query"
+                    type="text"
+                    placeholder="What would you like to ask next?"
+                    required="Query is required."
+                    errors={errors}
+                  />
+                </div>
+
+                <button disabled={true}>
+                  <BsFillSendFill
+                    className={`text-3xl text-[#a56baf] cursor-not-allowed opacity-50`}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Popup>
+    );
   }
 
   if (notesQueriesError) {
-    return <div>Error Page...</div>;
+    return (
+      <Popup
+        style={{
+          backgroundColor: "#061515",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          borderRadius: "12px",
+          padding: "1rem",
+          width: screenSize.width > 1024 ? "65%" : "90%",
+          height: `100%`,
+        }}
+        onClose={onClose}
+      >
+        <div className="flex flex-col w-full h-full rounded-lg p-4 gap-4 bg-main-light">
+          <div className="flex w-full justify-center p-4">
+            <div className="text-4xl font-bold">Ask your notes a question!</div>
+          </div>
+          <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+            <h1>Error loading Query Notes Tool.</h1>
+          </div>
+        </div>
+      </Popup>
+    );
   }
 
   if (data.notesQueries && authorId) {

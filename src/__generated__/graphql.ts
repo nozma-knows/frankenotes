@@ -49,8 +49,6 @@ export type Mutation = {
   login: Session;
   logout: Session;
   updateNote: Note;
-  updateNoteContent: Note;
-  updateNoteTitle: Note;
   updateNotesQuery: NotesQuery;
 };
 
@@ -96,18 +94,6 @@ export type MutationUpdateNoteArgs = {
 };
 
 
-export type MutationUpdateNoteContentArgs = {
-  content: Scalars['String'];
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateNoteTitleArgs = {
-  id: Scalars['String'];
-  title: Scalars['String'];
-};
-
-
 export type MutationUpdateNotesQueryArgs = {
   id: Scalars['String'];
   input: UpdateNotesQueryInput;
@@ -117,8 +103,8 @@ export type Note = {
   __typename?: 'Note';
   author: User;
   authorId: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
+  editorState: Scalars['String'];
   id: Scalars['ID'];
   title?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
@@ -126,7 +112,7 @@ export type Note = {
 
 export type NoteInput = {
   authorId: Scalars['ID'];
-  content?: InputMaybe<Scalars['String']>;
+  editorState: Scalars['String'];
   title?: InputMaybe<Scalars['String']>;
 };
 

@@ -1,13 +1,16 @@
-// import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { useContext } from "react";
+import NoteContext from "./context/useNoteContext";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { CodeNode } from "@lexical/code";
-import { Note } from "@/__generated__/graphql";
-import LexicalEditor from "./editors/lexical-editor";
-import theme from "./editors/lexical-editor/theme";
-import { EditorHistoryStateContext } from "./plugins/toolbar-plugin/context/EditorHistoryState";
-import { ApolloQueryResult } from "@apollo/client";
+import TextEditor from "./ui/TextEditor";
+import FileManager from "./ui/FileManager";
+
+const theme = {
+  // Theme styling goes here
+};
 
 const EDITOR_NODES = [
   AutoLinkNode,
@@ -18,44 +21,28 @@ const EDITOR_NODES = [
   ListItemNode,
   QuoteNode,
 ];
+export default function Editor() {
+  const { fileManagerOpen } = useContext(NoteContext);
 
-export default function Editor({
-  activeFile,
-  setActiveFile,
-  authorId,
-  refetch,
-  fileManagerOpen,
-  setFileManagerOpen,
-}: {
-  activeFile: Note | null;
-  setActiveFile: (activeFile: Note | null) => void;
-  authorId: string;
-  refetch: (
-    variables?: Partial<{ authorId: string | undefined }> | undefined
-  ) => Promise<ApolloQueryResult<any>>;
-  fileManagerOpen: boolean;
-  setFileManagerOpen: (fileManagerOpen: boolean) => void;
-}) {
+  function onError(error: Error) {
+    console.error(error);
+  }
+
+  const initialConfig = {
+    namespace: "MyEditor",
+    theme,
+    onError,
+    nodes: EDITOR_NODES,
+  };
+
+  const { activeNote } = useContext(NoteContext);
+
   return (
-    <div id="editor-wrapper" className={"flex w-full h-full"}>
-      <EditorHistoryStateContext>
-        <LexicalEditor
-          config={{
-            namespace: "lexical-editor",
-            nodes: EDITOR_NODES,
-            theme,
-            onError: (error) => {
-              console.log(error);
-            },
-          }}
-          activeFile={activeFile}
-          setActiveFile={setActiveFile}
-          authorId={authorId}
-          refetch={refetch}
-          fileManagerOpen={fileManagerOpen}
-          setFileManagerOpen={setFileManagerOpen}
-        />
-      </EditorHistoryStateContext>
-    </div>
+    <LexicalComposer initialConfig={initialConfig}>
+      <div className="flex flex-col sm:flex-row w-full h-full gap-2 p-2">
+        <TextEditor />
+        {fileManagerOpen && <FileManager />}
+      </div>
+    </LexicalComposer>
   );
 }

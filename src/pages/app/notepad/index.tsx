@@ -4,14 +4,19 @@ import { parse } from "cookie";
 import { Note } from "@/__generated__/graphql";
 import { NotesQuery } from "@/components/graph";
 import Page from "@/components/ui/pages/Page";
-import Editor from "@/components/feature-notepad/Editor";
 import DecodeToken from "@/components/utils/conversion/DecodeToken";
-import FileManager from "@/components/feature-notepad/file-manager";
 import useWindowSize, {
   smScreenMax,
+  mdScreenMax,
+  lgScreenMax,
+  xlScreenMin,
 } from "@/components/utils/hooks/useWindowSize";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
+import Editor from "@/components/feature-notepad/Editor";
+import NoteContext from "@/components/feature-notepad/context/useNoteContext";
+import LoadingPage from "@/components/ui/pages/LoadingPage";
+import ErrorPage from "@/components/ui/pages/ErrorPage";
 
 const title = `Frankenotes`;
 
@@ -40,51 +45,70 @@ export default function Notepad({ token }: { token: string }) {
   const authorId = decodedToken?.userId;
   const [fileManagerOpen, setFileManagerOpen] = useState(true);
 
-  const size = useWindowSize();
+  const windowSize = useWindowSize();
 
-  // Grab users notes
+  useEffect(() => {
+    console.log("windowSize: ", windowSize);
+  }, [windowSize]);
+
+  const [size, setSize] = useState("lg");
+
+  useEffect(() => {
+    const { width } = windowSize;
+    if (width >= xlScreenMin) {
+      setSize("xl");
+      // setSize("lg");
+    } else if (
+      width >= lgScreenMax ||
+      (width >= mdScreenMax && !fileManagerOpen)
+    ) {
+      setSize("lg");
+    } else if (
+      width >= mdScreenMax ||
+      (width >= smScreenMax && !fileManagerOpen)
+    ) {
+      setSize("md");
+    } else {
+      setSize("sm");
+    }
+  }, [fileManagerOpen, size, windowSize]);
+
+  // Grab notes from db
   const { loading, error, data, refetch } = useQuery(NotesQuery, {
     variables: { authorId },
   });
 
+  // Loading view
   if (loading) {
-    return <div>Loading Page...</div>;
+    return <LoadingPage />;
   }
 
+  // Error view
   if (error) {
-    return <div>Error Page...</div>;
+    return <ErrorPage />;
   }
+
+  // Loaded view
   if (data && authorId) {
     return (
-      <Page hideTopbar>
-        <div className="flex flex-col sm:flex-row gap-2 p-2 w-full">
-          {fileManagerOpen && (
-            <div className="flex w-full h-1/3 sm:h-full order-last sm:order-none sm:max-w-[15rem] md:max-w-xs 2xl:max-w-sm">
-              <div className="flex w-full flex-col">
-                {size.width >= smScreenMax && <AppLogo size={size} />}
-                <FileManager
-                  files={data.notes}
-                  authorId={authorId}
-                  activeNote={activeNote}
-                  setActiveNote={setActiveNote}
-                  refetch={refetch}
-                  setFileManagerOpen={setFileManagerOpen}
-                />
-              </div>
-            </div>
-          )}
-          <div className="flex flex-1">
-            <Editor
-              activeFile={activeNote}
-              setActiveFile={setActiveNote}
-              authorId={authorId}
-              refetch={refetch}
-              fileManagerOpen={fileManagerOpen}
-              setFileManagerOpen={setFileManagerOpen}
-            />
-          </div>
-        </div>
-      </Page>
+      <NoteContext.Provider
+        value={{
+          authorId,
+          size,
+          activeNote,
+          setActiveNote,
+          notes: data.notes,
+          loadingNotes: loading,
+          errorGrabbingNotes: error,
+          refetchNotes: refetch,
+          fileManagerOpen,
+          setFileManagerOpen,
+        }}
+      >
+        <Page hideTopbar>
+          <Editor />
+        </Page>
+      </NoteContext.Provider>
     );
   }
 }
