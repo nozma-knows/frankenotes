@@ -198,7 +198,7 @@ export default function QueryNotesPopup({
     );
   }
 
-  if (!notesQueriesError) {
+  if (notesQueriesError) {
     return (
       <Popup
         style={{
