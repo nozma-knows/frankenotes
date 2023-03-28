@@ -9,7 +9,7 @@ export const mobileScreenMax = 480;
 export const smScreenMax = 767;
 export const mdScreenMax = 1024;
 export const lgScreenMax = 1280;
-export const xlScreenMin = 1281;
+export const xlScreenMin = 1440;
 
 type ScreenSize = {
   min?: number;

@@ -326,24 +326,12 @@ export default function ToolbarPlugin() {
   );
 
   return (
-    <div className="flex w-full px-2 py-2 justify-between items-center rounded-t-xl h-16 bg-main-light overflow-hidden">
-      <div className="flex gap-2 items-center">
-        {(!fileManagerOpen || size === "sm") && (
-          // <div className="text-4xl	font-bold text-main-light px-[18px]">F</div>
-          <Image
-            src={FrankenotesAltLogo}
-            alt="Frankenotes Logo"
-            width={40}
-            className="mx-2"
-          />
-        )}
-        {size === "lg" && (
+    <div className="flex w-full justify-between items-center rounded-t-xl h-fit py-2 overflow-hidden">
+      <div className="flex gap-1 items-center">
+        <DeleteView canDelete={!isEditorEmpty} activeEditor={activeEditor} />
+        <Divider />
+        {(size === "lg" || size === "xl") && (
           <>
-            <DeleteView
-              canDelete={!isEditorEmpty}
-              activeEditor={activeEditor}
-            />
-            <Divider />
             <HistoryView
               canUndo={canUndo}
               canRedo={canRedo}

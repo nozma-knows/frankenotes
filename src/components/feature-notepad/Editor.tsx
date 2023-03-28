@@ -22,6 +22,8 @@ const EDITOR_NODES = [
   QuoteNode,
 ];
 export default function Editor() {
+  const { fileManagerOpen } = useContext(NoteContext);
+
   function onError(error: Error) {
     console.error(error);
   }
@@ -39,7 +41,7 @@ export default function Editor() {
     <LexicalComposer initialConfig={initialConfig}>
       <div className="flex flex-col sm:flex-row w-full h-full gap-2 p-2">
         <TextEditor />
-        <FileManager />
+        {fileManagerOpen && <FileManager />}
       </div>
     </LexicalComposer>
   );

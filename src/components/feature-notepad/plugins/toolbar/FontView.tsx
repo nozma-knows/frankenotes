@@ -67,7 +67,7 @@ export default function FontView(props: FontViewProps) {
             <Divider />
           </>
         )}
-        {size === "lg" && (
+        {size === "xl" && (
           <>
             <EditorButton
               Icon={BsTypeBold}
@@ -133,7 +133,7 @@ export default function FontView(props: FontViewProps) {
           Icon={BsType}
           stopCloseOnClickSelf
         >
-          {size !== "lg" && (
+          {size !== "xl" && (
             <>
               <DropDownItem
                 Icon={BsTypeBold}
@@ -211,7 +211,7 @@ export default function FontView(props: FontViewProps) {
           />
         </DropDown>
         <Divider />
-        {size === "lg" && (
+        {(size === "lg" || size === "xl") && (
           <>
             <ColorPicker
               disabled={!props.isEditable}

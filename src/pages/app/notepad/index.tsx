@@ -9,6 +9,7 @@ import useWindowSize, {
   smScreenMax,
   mdScreenMax,
   lgScreenMax,
+  xlScreenMin,
 } from "@/components/utils/hooks/useWindowSize";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
@@ -43,11 +44,35 @@ export default function Notepad({ token }: { token: string }) {
   const [fileManagerOpen, setFileManagerOpen] = useState(true);
 
   const windowSize = useWindowSize();
-  const [size, setSize] = useState("lg");
 
   useEffect(() => {
+    console.log("windowSize: ", windowSize);
+  }, [windowSize]);
+
+  const [size, setSize] = useState("lg");
+
+  // useEffect(() => {
+  //   const { width } = windowSize;
+  //   if (width >= lgScreenMax || (width >= mdScreenMax && !fileManagerOpen)) {
+  //     setSize("lg");
+  //   } else if (
+  //     width >= mdScreenMax ||
+  //     (width >= smScreenMax && !fileManagerOpen)
+  //   ) {
+  //     setSize("md");
+  //   }e else {
+  //     setSize("sm");
+  //   }
+  // }, [fileManagerOpen, size, windowSize]);
+  useEffect(() => {
     const { width } = windowSize;
-    if (width >= lgScreenMax || (width >= mdScreenMax && !fileManagerOpen)) {
+    if (width >= xlScreenMin) {
+      setSize("xl");
+      // setSize("lg");
+    } else if (
+      width >= lgScreenMax ||
+      (width >= mdScreenMax && !fileManagerOpen)
+    ) {
       setSize("lg");
     } else if (
       width >= mdScreenMax ||

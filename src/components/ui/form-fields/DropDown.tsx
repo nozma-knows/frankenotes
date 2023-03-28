@@ -224,7 +224,7 @@ export default function DropDown({
             className ||
             `${!disabled && "button"} ${
               round ? "rounded-full" : "rounded-lg"
-            } flex items-center gap-2 p-2 bg-tertiary-dark text-2xl text-main-dark`
+            } flex items-center gap-2 p-2  bg-tertiary-dark text-2xl text-main-dark`
           }
         >
           {Icon ? (

@@ -40,7 +40,7 @@ export default function TextEditor() {
   const { historyState } = useEditorHistoryState();
 
   return (
-    <div className="flex flex-col w-full h-full rounded-lg p-2  bg-main-light">
+    <div className="flex flex-col w-full h-full rounded-lg px-2 bg-main-light">
       <ToolbarPlugin />
       <DetailsPlugin />
       <RichTextPlugin

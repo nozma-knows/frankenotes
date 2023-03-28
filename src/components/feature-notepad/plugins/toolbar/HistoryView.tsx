@@ -15,7 +15,7 @@ export default function HistoryView({
   isEditable: boolean;
 }) {
   return (
-    <div className={`flex gap-2 text-2xl ${!canUndo && "opacity-50"}`}>
+    <div className={`flex gap-1 text-2xl ${!canUndo && "opacity-50"}`}>
       <EditorButton
         Icon={BsArrowCounterclockwise}
         label="Undo (⌘Z)"
