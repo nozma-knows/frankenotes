@@ -21,7 +21,7 @@ export default function SaveToDBPlugin() {
   const handleSaveToVectorStore = useCallback(
     async ({ docId, doc }: { docId: string; doc: string }) => {
       try {
-        if (doc) {
+        if (doc && docId && authorId) {
           const response = await fetch(`../api/save-to-vector-store`, {
             method: "POST",
             headers: {
@@ -29,7 +29,9 @@ export default function SaveToDBPlugin() {
               "Content-type": "application/json",
             },
             body: JSON.stringify({
-              message: "Test message!!",
+              docId,
+              doc,
+              authorId,
             }),
           });
         }
@@ -37,10 +39,11 @@ export default function SaveToDBPlugin() {
         console.error("Error submitting prompt: ", error);
       }
     },
-    []
+    [authorId]
   );
 
   useEffect(() => {
+    console.log("setLastFileUpdate: ", activeNote?.updatedAt);
     const time = new Date();
     setLastFileUpdate(time.valueOf());
   }, [activeNote]);
