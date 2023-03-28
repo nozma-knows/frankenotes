@@ -1,4 +1,11 @@
-import { MouseEventHandler, useState, useContext, useCallback } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  MouseEventHandler,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { useMutation } from "@apollo/client";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Tooltip } from "@mui/material";
@@ -132,7 +139,6 @@ const handleUpdateActiveNote = (
   setActiveNote: (activeNote: Note | null) => void,
   editor: LexicalEditor
 ) => {
-  editor.setEditorState(editor.parseEditorState(note.editorState));
   setActiveNote(note);
 };
 
@@ -243,6 +249,12 @@ export default function FileManager() {
     },
     [authorId]
   );
+
+  useEffect(() => {
+    if (activeNote?.id) {
+      editor.setEditorState(editor.parseEditorState(activeNote.editorState));
+    }
+  }, [activeNote?.id, editor]);
 
   // Delete note mutation
   const [deleteNote] = useMutation(DeleteNoteMutation, {
