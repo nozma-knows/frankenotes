@@ -29,9 +29,7 @@ export default function SaveToDBPlugin() {
               "Content-type": "application/json",
             },
             body: JSON.stringify({
-              docId,
-              doc,
-              authorId,
+              message: "Test message!!",
             }),
           });
         }
@@ -39,7 +37,7 @@ export default function SaveToDBPlugin() {
         console.error("Error submitting prompt: ", error);
       }
     },
-    [authorId]
+    []
   );
 
   useEffect(() => {

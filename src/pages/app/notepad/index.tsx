@@ -28,16 +28,6 @@ export async function getServerSideProps(context: Context) {
   return { redirect: { destination: "/" } };
 }
 
-const AppLogo = ({ size }: { size: { width: number; height: number } }) => {
-  return (
-    <div className="flex justify-center p-2 pb-4">
-      {size.width >= smScreenMax && (
-        <Logo Icon={FrankenotesLogo} text={title} />
-      )}
-    </div>
-  );
-};
-
 export default function Notepad({ token }: { token: string }) {
   const decodedToken = DecodeToken({ token });
   const [activeNote, setActiveNote] = useState<Note | null>(null);

@@ -62,7 +62,7 @@ export default function TextField({
                 className="flex w-full"
                 {...field}
                 type={type}
-                placeholder={`${placeholder}${required ? "*" : ""}`}
+                placeholder={`${placeholder}`}
                 disabled={disabled}
                 color={errors && errors[name] ? "error" : color}
                 multiline={multiline}
