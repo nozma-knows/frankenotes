@@ -8,7 +8,7 @@ export const updateNoteDocument = gql`
       updatedAt
       authorId
       title
-      content
+      editorState
     }
   }
 `;

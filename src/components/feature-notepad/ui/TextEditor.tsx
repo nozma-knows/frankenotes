@@ -13,6 +13,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import SaveToDBPlugin from "../plugins/save-to-db";
+import SaveToVectorStorePlugin from "../plugins/save-to-vector-store";
 import { EditorState } from "lexical";
 import { Note } from "@/__generated__/graphql";
 import DetailsPlugin from "../plugins/details";
@@ -66,6 +67,7 @@ export default function TextEditor() {
         }
       />
       <SaveToDBPlugin />
+      <SaveToVectorStorePlugin />
     </div>
   );
 }

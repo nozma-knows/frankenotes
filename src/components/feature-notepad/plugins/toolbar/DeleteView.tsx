@@ -1,5 +1,4 @@
-import { LexicalEditor } from "lexical";
-import { CLEAR_EDITOR_COMMAND } from "lexical";
+import { LexicalEditor, CLEAR_EDITOR_COMMAND } from "lexical";
 import { BsTrash } from "react-icons/bs";
 import EditorButton from "../../ui/buttons/EditorButton";
 

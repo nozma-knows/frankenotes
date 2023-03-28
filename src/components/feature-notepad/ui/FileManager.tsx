@@ -1,18 +1,24 @@
-import { MouseEventHandler, useContext, useEffect } from "react";
+import { MouseEventHandler, useState, useContext, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Tooltip } from "@mui/material";
 import { IconType } from "react-icons";
 import { BsThreeDots, BsTrash } from "react-icons/bs";
-import { BsPlusLg, BsChevronLeft, BsChevronDown } from "react-icons/bs";
+import {
+  BsPlusLg,
+  BsChevronLeft,
+  BsChevronDown,
+  BsQuestionLg,
+} from "react-icons/bs";
 import { smScreenMax } from "@/components/utils/hooks/useWindowSize";
 import { Note } from "@/__generated__/graphql";
 import NoteContext from "../context/useNoteContext";
 import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot, LexicalEditor } from "lexical";
+import { $getRoot, LexicalEditor, CLEAR_EDITOR_COMMAND } from "lexical";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
+import QueryNotesPopup from "@/components/feature-ai/ui/popups/QueryNotesPopup";
 
 const title = `Frankenotes`;
 
@@ -69,10 +75,28 @@ const FileManagerTopbar = ({
     CreateNote();
   };
 
+  const [showQueryNotesPopup, setShowQueryNotesPopup] = useState(false);
+
   return (
     <div className="flex w-full p-2 rounded-t-xl">
+      {showQueryNotesPopup && (
+        <QueryNotesPopup
+          notes={notes}
+          authorId={authorId}
+          onClose={() => setShowQueryNotesPopup(false)}
+        />
+      )}
       <div className="flex gap-1 sm:gap-4 items-center justify-end w-full">
         <div className="flex w-full gap-1 justify-between items-center text-main-dark">
+          <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
+            <div className="flex gap-1 sm:gap-4">
+              <FileManagerTopbarButton
+                Icon={BsQuestionLg}
+                onClick={() => setShowQueryNotesPopup(true)}
+                label="Ask your notes a question"
+              />
+            </div>
+          </div>
           <div className="flex gap-1 sm:gap-4">
             <div className="flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 bg-tertiary-dark rounded-md">
               <FileManagerTopbarButton
@@ -198,13 +222,45 @@ export default function FileManager() {
     });
   };
 
+  const handleDeleteFromVectorStore = useCallback(
+    async ({ docId, doc }: { docId: string; doc: string }) => {
+      try {
+        const response = await fetch(`../api/delete-from-vectore-store`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            docId,
+            doc,
+            authorId,
+          }),
+        });
+      } catch (error) {
+        console.error("Error submitting prompt: ", error);
+      }
+    },
+    [authorId]
+  );
+
   // Delete note mutation
   const [deleteNote] = useMutation(DeleteNoteMutation, {
     onCompleted: (data: { deleteNote: Note }) => {
+      const editorState = editor.getEditorState();
+      editorState.read(() => {
+        const root = $getRoot();
+        const content = root.getTextContent();
+        handleDeleteFromVectorStore({
+          docId: data.deleteNote.id as string,
+          doc: content as string,
+        });
+      });
       refetchNotes();
       if (data.deleteNote.id === activeNote?.id) {
         setActiveNote(null);
       }
+      editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
     },
     onError: () => console.log("error!"),
   });

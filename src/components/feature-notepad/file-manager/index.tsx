@@ -1,4 +1,4 @@
-import React, { useContext, MouseEventHandler } from "react";
+import React, { useEffect, useContext, MouseEventHandler } from "react";
 import { useMutation } from "@apollo/client";
 import { Tooltip } from "@mui/material";
 import { IconType } from "react-icons";
@@ -17,6 +17,7 @@ import NoteContext from "../context/useNoteContext";
 import { smScreenMax } from "@/components/utils/hooks/useWindowSize";
 import useWindowSize from "@/components/utils/hooks/useWindowSize";
 import { EditorState } from "lexical";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const emptyEditorState =
   '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
@@ -193,6 +194,12 @@ FilePreviewProps) => {
 };
 
 export default function FileManager({ files, authorId }: FileManagerProps) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    console.log("editor.getEditorState(): ", editor.getEditorState());
+  }, [editor]);
+
   const size = useWindowSize();
   const {
     activeNote,
@@ -216,7 +223,7 @@ export default function FileManager({ files, authorId }: FileManagerProps) {
   const CreateNote = () => {
     const input = {
       authorId,
-      editorState: emptyEditorState,
+      editorState: JSON.stringify(editor.getEditorState()),
     };
     createNote({
       variables: {
