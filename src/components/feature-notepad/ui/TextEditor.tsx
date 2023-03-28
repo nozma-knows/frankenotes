@@ -9,12 +9,17 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import SaveToDBPlugin from "../plugins/save-to-db";
 import { EditorState } from "lexical";
 import { Note } from "@/__generated__/graphql";
 import DetailsPlugin from "../plugins/details";
 import SpeechToTextPlugin from "../plugins/speech-to-text";
 import { useEditorHistoryState } from "../context/EditorHistoryState";
+import LinkPlugin from "../plugins/link";
+import PlaygroundAutoLinkPlugin from "../plugins/auto-link";
 
 function onChange(
   editorState: EditorState,
@@ -48,6 +53,11 @@ export default function TextEditor() {
       <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <SpeechToTextPlugin />
       <TabIndentationPlugin />
+      <ListPlugin />
+      <CheckListPlugin />
+      <AutoFocusPlugin />
+      <LinkPlugin />
+      <PlaygroundAutoLinkPlugin />
       <OnChangePlugin
         onChange={(editorState: EditorState) =>
           onChange(editorState, activeNote, setActiveNote)
