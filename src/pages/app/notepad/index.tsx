@@ -15,6 +15,8 @@ import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
 import Editor from "@/components/feature-notepad/Editor";
 import NoteContext from "@/components/feature-notepad/context/useNoteContext";
+import LoadingPage from "@/components/ui/pages/LoadingPage";
+import ErrorPage from "@/components/ui/pages/ErrorPage";
 
 const title = `Frankenotes`;
 
@@ -51,19 +53,6 @@ export default function Notepad({ token }: { token: string }) {
 
   const [size, setSize] = useState("lg");
 
-  // useEffect(() => {
-  //   const { width } = windowSize;
-  //   if (width >= lgScreenMax || (width >= mdScreenMax && !fileManagerOpen)) {
-  //     setSize("lg");
-  //   } else if (
-  //     width >= mdScreenMax ||
-  //     (width >= smScreenMax && !fileManagerOpen)
-  //   ) {
-  //     setSize("md");
-  //   }e else {
-  //     setSize("sm");
-  //   }
-  // }, [fileManagerOpen, size, windowSize]);
   useEffect(() => {
     const { width } = windowSize;
     if (width >= xlScreenMin) {
@@ -91,12 +80,12 @@ export default function Notepad({ token }: { token: string }) {
 
   // Loading view
   if (loading) {
-    return <div>Loading Page...</div>;
+    return <LoadingPage />;
   }
 
   // Error view
   if (error) {
-    return <div>Error Page...</div>;
+    return <ErrorPage />;
   }
 
   // Loaded view

@@ -50,7 +50,7 @@ export default function Topbar() {
   }, [showDropdown, size]);
 
   return (
-    <div className="flex justify-between items-center px-2 sm:px-8 py-4">
+    <div className="flex justify-between items-center px-4 sm:px-12 py-4">
       <Logo Icon={FrankenotesLogo} text={title} />
       <div className="flex gap-4">
         {showDropdown ? (
