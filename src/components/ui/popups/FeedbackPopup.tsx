@@ -48,7 +48,7 @@ export default function FeedbackPopup({ onClose }: FeedbackPopupProps) {
       }}
       onClose={onClose}
     >
-      <div className="flex flex-col w-full h-full items-center justify-between p-12 gap-4">
+      <div className="flex flex-col w-full h-full items-center justify-between p-2 gap-4">
         <h1 className="text-main-dark">Share your feedback!</h1>
         {!successfullySent ? (
           <form

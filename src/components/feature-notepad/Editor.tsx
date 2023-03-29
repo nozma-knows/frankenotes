@@ -44,7 +44,7 @@ export default function Editor() {
           <TextEditor />
         </div>
         {fileManagerOpen && (
-          <div className="flex h-fit">
+          <div className="flex h-fit sm:h-full sm:order-first">
             <FileManager />
           </div>
         )}
