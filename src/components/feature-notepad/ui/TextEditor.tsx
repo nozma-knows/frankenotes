@@ -22,6 +22,32 @@ import SpeechToTextPlugin from "../plugins/speech-to-text";
 import { useEditorHistoryState } from "../context/EditorHistoryState";
 import LinkPlugin from "../plugins/link";
 import PlaygroundAutoLinkPlugin from "../plugins/auto-link";
+import { Tooltip } from "@mui/material";
+import { BsFillChatRightFill } from "react-icons/bs";
+
+const FeedbackButton = ({
+  disabled,
+  setShowFeedbackPopup,
+}: {
+  disabled: boolean;
+  setShowFeedbackPopup: (showFeedbackPopup: boolean) => void;
+}) => {
+  return (
+    <div className="absolute bottom-4 right-4">
+      <Tooltip title="Share feedback!" arrow>
+        <button
+          disabled={disabled}
+          onClick={() => setShowFeedbackPopup(true)}
+          type="button"
+          aria-label="Share feedback!"
+          className={`${!disabled && "button"} bg-tertiary-dark p-2 rounded-lg`}
+        >
+          <BsFillChatRightFill className="p-2 w-12 h-12" />
+        </button>
+      </Tooltip>
+    </div>
+  );
+};
 
 function onChange(
   editorState: EditorState,
@@ -37,11 +63,16 @@ function onChange(
 }
 
 export default function TextEditor() {
-  const { activeNote, setActiveNote } = useContext(NoteContext);
+  const { activeNote, setActiveNote, setShowFeedbackPopup } =
+    useContext(NoteContext);
   const { historyState } = useEditorHistoryState();
 
   return (
-    <div className="flex flex-col w-full h-full rounded-lg px-2 bg-main-light">
+    <div className="flex flex-col w-full h-full rounded-lg px-2 bg-main-light overflow-hidden relative">
+      <FeedbackButton
+        disabled={false}
+        setShowFeedbackPopup={setShowFeedbackPopup}
+      />
       <ToolbarPlugin />
       <DetailsPlugin />
       <RichTextPlugin

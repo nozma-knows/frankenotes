@@ -20,6 +20,8 @@ type NoteContextType = {
   ) => Promise<ApolloQueryResult<any>>;
   fileManagerOpen: boolean;
   setFileManagerOpen: (fileManagerOpen: boolean) => void;
+  showFeedbackPopup: boolean;
+  setShowFeedbackPopup: (showFeedbackPopup: boolean) => void;
 };
 
 const NoteContext = createContext<NoteContextType>({
@@ -33,6 +35,8 @@ const NoteContext = createContext<NoteContextType>({
   refetchNotes: () => Promise.resolve({} as ApolloQueryResult<any>),
   fileManagerOpen: true,
   setFileManagerOpen: () => {},
+  showFeedbackPopup: false,
+  setShowFeedbackPopup: () => {},
 });
 
 export default NoteContext;

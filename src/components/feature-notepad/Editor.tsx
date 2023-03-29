@@ -40,8 +40,14 @@ export default function Editor() {
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="flex flex-col sm:flex-row w-full h-full gap-2 p-2">
-        <TextEditor />
-        {fileManagerOpen && <FileManager />}
+        <div className="flex h-full overflow-hidden">
+          <TextEditor />
+        </div>
+        {fileManagerOpen && (
+          <div className="flex h-fit">
+            <FileManager />
+          </div>
+        )}
       </div>
     </LexicalComposer>
   );
