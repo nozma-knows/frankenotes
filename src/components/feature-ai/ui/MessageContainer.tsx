@@ -38,10 +38,10 @@ export default function MessageContainer({
       ref={scrollRef}
     >
       {messages.length ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1 sm:gap-4">
           {messages.map((message, index) => {
             return (
-              <div className="flex flex-col gap-4" key={index}>
+              <div className="flex flex-col gap-1 sm:gap-4" key={index}>
                 <div className="flex w-full justify-end">
                   <div className="flex w-fit p-2 px-4 rounded-xl max-w-sm bg-blue-700">
                     {message.query}
