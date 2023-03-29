@@ -127,10 +127,6 @@ export default function Notepad({ token }: { token: string }) {
             {showFeedbackPopup && (
               <FeedbackPopup onClose={() => setShowFeedbackPopup(false)} />
             )}
-            {/* <FeedbackButton
-              disabled={false}
-              setShowFeedbackPopup={setShowFeedbackPopup}
-            /> */}
             <Editor />
           </>
         </Page>
