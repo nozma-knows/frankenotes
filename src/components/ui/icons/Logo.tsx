@@ -11,7 +11,7 @@ export default function Logo({ Icon, text }: { Icon: string; text: string }) {
         <div className="relative flex w-14 h-14 lg:w-16 lg:h-16">
           <Image src={Icon} alt="Frankenotes logo" fill />
         </div>
-        <div>{text}</div>
+        <div className="hidden sm:block">{text}</div>
       </div>
     </Link>
   );
