@@ -163,9 +163,9 @@ export default function QueryNotesPopup({
         }}
         onClose={onClose}
       >
-        <div className="flex flex-col w-full h-full rounded-lg p-4 gap-4 bg-main-light">
-          <div className="flex w-full justify-center p-4">
-            <div className="text-2xl sm:text-4xl font-bold">
+        <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
+          <div className="flex w-full justify-center p-1 sm:p-4">
+            <div className="text-xl sm:text-4xl font-bold">
               Ask your notes a question!
             </div>
           </div>
@@ -214,9 +214,11 @@ export default function QueryNotesPopup({
         }}
         onClose={onClose}
       >
-        <div className="flex flex-col w-full h-full rounded-lg p-4 gap-4 bg-main-light">
-          <div className="flex w-full justify-center p-4">
-            <div className="text-4xl font-bold">Ask your notes a question!</div>
+        <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
+          <div className="flex w-full justify-center p-1 sm:p-4">
+            <div className="text-xl sm:text-4xl font-bold">
+              Ask your notes a question!
+            </div>
           </div>
           <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
             <h1>Error loading Query Notes Tool.</h1>
@@ -254,7 +256,7 @@ export default function QueryNotesPopup({
               Ask your notes a question!
             </div>
           </div>
-          <div className="flex w-full h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+          <div className="flex w-full h-full bg-main-dark text-main-dark rounded-lg p-2 sm:p-8 overflow-auto">
             <MessageContainer messages={messages} loading={loading} />
           </div>
           <div className="flex w-full items-center h-fit bg-main-dark text-main-dark rounded-lg">
