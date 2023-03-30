@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { ApolloError, ApolloQueryResult } from "@apollo/client";
 import { EditorState } from "lexical";
-import { Note } from "@/__generated__/graphql";
+import { Note, NotesQuery } from "@/__generated__/graphql";
 
 type NoteContextType = {
   authorId: string;
@@ -12,6 +12,14 @@ type NoteContextType = {
   loadingNotes: boolean;
   errorGrabbingNotes: ApolloError | undefined;
   refetchNotes: (
+    variables?:
+      | Partial<{
+          authorId: string | undefined;
+        }>
+      | undefined
+  ) => Promise<ApolloQueryResult<any>>;
+  notesQueries: NotesQuery[];
+  refetchNotesQueries: (
     variables?:
       | Partial<{
           authorId: string | undefined;
@@ -33,6 +41,8 @@ const NoteContext = createContext<NoteContextType>({
   loadingNotes: false,
   errorGrabbingNotes: undefined,
   refetchNotes: () => Promise.resolve({} as ApolloQueryResult<any>),
+  notesQueries: [],
+  refetchNotesQueries: () => Promise.resolve({} as ApolloQueryResult<any>),
   fileManagerOpen: true,
   setFileManagerOpen: () => {},
   showFeedbackPopup: false,

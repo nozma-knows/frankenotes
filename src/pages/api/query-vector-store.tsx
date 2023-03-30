@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PineconeStore } from "langchain/vectorstores";
 import { OpenAIEmbeddings } from "langchain/embeddings";
 import { PineconeClient } from "@pinecone-database/pinecone";
-import { VectorDBQAChain } from "langchain/chains";
+// import { VectorDBQAChain } from "langchain/chains";
+import { ChatVectorDBQAChain } from "langchain/chains";
 import { OpenAI } from "langchain/llms";
 
 type ResponseError = {
@@ -17,6 +18,7 @@ type ResponseData = {
 interface GenerateNextApiRequest extends NextApiRequest {
   body: {
     query: string;
+    chatHistory: string;
     authorId: string;
   };
 }
@@ -27,7 +29,7 @@ export default async function handler(
 ) {
   try {
     // Grab input args
-    const { query, authorId } = req.body;
+    const { query, chatHistory, authorId } = req.body;
     // Error handling on input args
     if (!query || !authorId) {
       res.status(400).json({
@@ -56,12 +58,15 @@ export default async function handler(
     const model = new OpenAI({
       modelName: "gpt-3.5-turbo",
     });
-    const chain = VectorDBQAChain.fromLLM(model, vectorStore, {
+    const chain = ChatVectorDBQAChain.fromLLM(model, vectorStore, {
       k: 5,
       returnSourceDocuments: true,
     });
 
-    const response = await chain.call({ query });
+    const response = await chain.call({
+      question: query,
+      chat_history: chatHistory,
+    });
 
     res.status(200).json({
       message: response.text,
