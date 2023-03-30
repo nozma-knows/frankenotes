@@ -51,9 +51,11 @@ const handleQueryVectorStore = async ({
     status: NotesQueryStatus
   ) => void;
 }) => {
-  const chatHistory = `Question: ${previousNotesQuery.query || ""}  Answer: ${
-    previousNotesQuery.response || ""
-  }`;
+  const chatHistory = previousNotesQuery
+    ? `Question: ${previousNotesQuery.query || ""}  Answer: ${
+        previousNotesQuery.response || ""
+      }`
+    : "";
 
   try {
     const response = await fetch(`../api/query-vector-store`, {
