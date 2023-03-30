@@ -7,7 +7,7 @@ import {
   UpdateNotesQueryMutation,
   NotesQueriesQuery,
 } from "@/components/graph";
-import { Note, NotesQuery } from "@/__generated__/graphql";
+import { Note, NotesQuery, NotesQueryStatus } from "@/__generated__/graphql";
 import NoStyleTextfield from "@/components/ui/form-fields/NoStyleTextField";
 import Popup from "@/components/ui/popups/Popup";
 import MessageContainer from "../MessageContainer";
@@ -45,7 +45,11 @@ const handleQueryVectorStore = async ({
   query: string;
   notesQuery: NotesQuery;
   previousNotesQuery: NotesQuery;
-  UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
+  UpdateNotesQuery: (
+    notesQuery: NotesQuery,
+    response: string,
+    status: NotesQueryStatus
+  ) => void;
 }) => {
   const chatHistory = `Question: ${previousNotesQuery.query || ""}  Answer: ${
     previousNotesQuery.response || ""
@@ -64,7 +68,16 @@ const handleQueryVectorStore = async ({
       }),
     });
     const data = await response.json();
-    UpdateNotesQuery(notesQuery, data.message);
+    console.log("QueryNotesPopup.tsx - data: ", data);
+    if (data.message) {
+      UpdateNotesQuery(notesQuery, data.message, NotesQueryStatus.Successful);
+    } else {
+      UpdateNotesQuery(
+        notesQuery,
+        "There was an issue grabbing your response, please try again!",
+        NotesQueryStatus.Error
+      );
+    }
   } catch (error) {
     console.error("Error submitting prompt: ", error);
   }
@@ -92,13 +105,18 @@ export default function QueryNotesPopup({
     onError: () => console.log("error!"),
   });
 
-  const UpdateNotesQuery = (notesQuery: NotesQuery, response: string) => {
+  const UpdateNotesQuery = (
+    notesQuery: NotesQuery,
+    response: string,
+    status: NotesQueryStatus
+  ) => {
     const { id } = notesQuery;
     updateNotesQuery({
       variables: {
         id,
         input: {
           response,
+          status,
         },
       },
     });
@@ -143,97 +161,6 @@ export default function QueryNotesPopup({
       query: "",
     },
   });
-
-  // // Grab users notes queries
-  // const {
-  //   loading: notesQueriesLoading,
-  //   error: notesQueriesError,
-  //   data,
-  //   refetch: refetchNotesQueries,
-  // } = useQuery(NotesQueriesQuery, {
-  //   variables: { authorId },
-  // });
-
-  // if (notesQueriesLoading) {
-  //   return (
-  //     <Popup
-  //       style={{
-  //         backgroundColor: "#061515",
-  //         display: "flex",
-  //         flexDirection: "column",
-  //         alignItems: "center",
-  //         borderRadius: "12px",
-  //         padding: "1rem",
-  //         width: screenSize.width > 1024 ? "65%" : "90%",
-  //         height: `100%`,
-  //       }}
-  //       onClose={onClose}
-  //     >
-  //       <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
-  //         <div className="flex w-full justify-center p-1 sm:p-4">
-  //           <div className="text-xl sm:text-4xl font-bold">
-  //             Ask your notes a question!
-  //           </div>
-  //         </div>
-  //         <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
-  //           <PulseLoader color="#58335e" size={40} />
-  //         </div>
-  //         <div className="flex w-full items-center h-24 bg-main-dark text-main-dark rounded-lg">
-  //           <div className="flex w-full px-4">
-  //             <div className="flex w-full gap-4">
-  //               <div className="flex w-full h-full items-center">
-  //                 <NoStyleTextfield
-  //                   control={control}
-  //                   name="query"
-  //                   type="text"
-  //                   placeholder="What would you like to ask next?"
-  //                   required="Query is required."
-  //                   errors={errors}
-  //                 />
-  //               </div>
-
-  //               <button disabled={true}>
-  //                 <BsFillSendFill
-  //                   className={`text-3xl text-[#a56baf] cursor-not-allowed opacity-50`}
-  //                 />
-  //               </button>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </Popup>
-  //   );
-  // }
-
-  // if (notesQueriesError) {
-  //   return (
-  //     <Popup
-  //       style={{
-  //         backgroundColor: "#061515",
-  //         display: "flex",
-  //         flexDirection: "column",
-  //         alignItems: "center",
-  //         borderRadius: "12px",
-  //         padding: "1rem",
-  //         width: screenSize.width > 1024 ? "65%" : "90%",
-  //         height: `100%`,
-  //       }}
-  //       onClose={onClose}
-  //     >
-  //       <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
-  //         <div className="flex w-full justify-center p-1 sm:p-4">
-  //           <div className="text-xl sm:text-4xl font-bold">
-  //             Ask your notes a question!
-  //           </div>
-  //         </div>
-  //         <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
-  //           <h1>Error loading Query Notes Tool.</h1>
-  //         </div>
-  //       </div>
-  //     </Popup>
-  //   );
-  // }
-  console.log("notesQueries: ", notesQueries);
 
   if (notesQueries && authorId) {
     const messages = notesQueries.map((notesQuery: NotesQuery) => {
