@@ -43,7 +43,6 @@ export default function SaveToDBPlugin() {
   );
 
   useEffect(() => {
-    console.log("setLastFileUpdate: ", activeNote?.updatedAt);
     const time = new Date();
     setLastFileUpdate(time.valueOf());
   }, [activeNote]);

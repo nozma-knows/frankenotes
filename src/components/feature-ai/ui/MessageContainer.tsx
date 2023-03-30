@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import PulseLoader from "react-spinners/PulseLoader";
-import { NotesQueryStatus } from "@/__generated__/graphql";
+import { Maybe, NotesQueryStatus } from "@/__generated__/graphql";
 
 // type MessageType = {
 //   message: string;
@@ -9,8 +9,8 @@ import { NotesQueryStatus } from "@/__generated__/graphql";
 
 type MessageType = {
   query: string;
-  response: string;
-  status: NotesQueryStatus;
+  response: Maybe<string> | undefined;
+  status: Maybe<NotesQueryStatus> | undefined;
 };
 
 export default function MessageContainer({

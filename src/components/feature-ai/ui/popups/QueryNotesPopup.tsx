@@ -1,4 +1,5 @@
-import React, { useState, useEffect, MouseEventHandler } from "react";
+import React, { useState, useContext, MouseEventHandler } from "react";
+import NoteContext from "@/components/feature-notepad/context/useNoteContext";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -20,11 +21,6 @@ interface QueryNotesPopupProps {
   onClose: MouseEventHandler<HTMLButtonElement>;
 }
 
-type MessageType = {
-  message: string;
-  sender: string;
-};
-
 const addUserMessage = ({
   query,
   CreateNotesQuery,
@@ -42,13 +38,19 @@ const handleQueryVectorStore = async ({
   authorId,
   query,
   notesQuery,
+  previousNotesQuery,
   UpdateNotesQuery,
 }: {
   authorId: string;
   query: string;
   notesQuery: NotesQuery;
+  previousNotesQuery: NotesQuery;
   UpdateNotesQuery: (notesQuery: NotesQuery, response: string) => void;
 }) => {
+  const chatHistory = `Question: ${previousNotesQuery.query || ""}  Answer: ${
+    previousNotesQuery.response || ""
+  }`;
+
   try {
     const response = await fetch(`../api/query-vector-store`, {
       method: "POST",
@@ -57,6 +59,7 @@ const handleQueryVectorStore = async ({
       },
       body: JSON.stringify({
         query,
+        chatHistory,
         authorId,
       }),
     });
@@ -73,7 +76,8 @@ export default function QueryNotesPopup({
   onClose,
 }: QueryNotesPopupProps) {
   const screenSize = useWindowSize();
-  const [query, setQuery] = useState("");
+
+  const { notesQueries, refetchNotesQueries } = useContext(NoteContext);
 
   const [loading, setLoading] = useState(false);
 
@@ -109,6 +113,7 @@ export default function QueryNotesPopup({
           authorId,
           query: data.createNotesQuery.query,
           notesQuery: data.createNotesQuery,
+          previousNotesQuery: notesQueries[notesQueries.length - 1],
           UpdateNotesQuery,
         });
       },
@@ -138,98 +143,100 @@ export default function QueryNotesPopup({
       query: "",
     },
   });
-  // Grab users notes queries
-  const {
-    loading: notesQueriesLoading,
-    error: notesQueriesError,
-    data,
-    refetch: refetchNotesQueries,
-  } = useQuery(NotesQueriesQuery, {
-    variables: { authorId },
-  });
 
-  if (notesQueriesLoading) {
-    return (
-      <Popup
-        style={{
-          backgroundColor: "#061515",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: "12px",
-          padding: "1rem",
-          width: screenSize.width > 1024 ? "65%" : "90%",
-          height: `100%`,
-        }}
-        onClose={onClose}
-      >
-        <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
-          <div className="flex w-full justify-center p-1 sm:p-4">
-            <div className="text-xl sm:text-4xl font-bold">
-              Ask your notes a question!
-            </div>
-          </div>
-          <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
-            <PulseLoader color="#58335e" size={40} />
-          </div>
-          <div className="flex w-full items-center h-24 bg-main-dark text-main-dark rounded-lg">
-            <div className="flex w-full px-4">
-              <div className="flex w-full gap-4">
-                <div className="flex w-full h-full items-center">
-                  <NoStyleTextfield
-                    control={control}
-                    name="query"
-                    type="text"
-                    placeholder="What would you like to ask next?"
-                    required="Query is required."
-                    errors={errors}
-                  />
-                </div>
+  // // Grab users notes queries
+  // const {
+  //   loading: notesQueriesLoading,
+  //   error: notesQueriesError,
+  //   data,
+  //   refetch: refetchNotesQueries,
+  // } = useQuery(NotesQueriesQuery, {
+  //   variables: { authorId },
+  // });
 
-                <button disabled={true}>
-                  <BsFillSendFill
-                    className={`text-3xl text-[#a56baf] cursor-not-allowed opacity-50`}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Popup>
-    );
-  }
+  // if (notesQueriesLoading) {
+  //   return (
+  //     <Popup
+  //       style={{
+  //         backgroundColor: "#061515",
+  //         display: "flex",
+  //         flexDirection: "column",
+  //         alignItems: "center",
+  //         borderRadius: "12px",
+  //         padding: "1rem",
+  //         width: screenSize.width > 1024 ? "65%" : "90%",
+  //         height: `100%`,
+  //       }}
+  //       onClose={onClose}
+  //     >
+  //       <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
+  //         <div className="flex w-full justify-center p-1 sm:p-4">
+  //           <div className="text-xl sm:text-4xl font-bold">
+  //             Ask your notes a question!
+  //           </div>
+  //         </div>
+  //         <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+  //           <PulseLoader color="#58335e" size={40} />
+  //         </div>
+  //         <div className="flex w-full items-center h-24 bg-main-dark text-main-dark rounded-lg">
+  //           <div className="flex w-full px-4">
+  //             <div className="flex w-full gap-4">
+  //               <div className="flex w-full h-full items-center">
+  //                 <NoStyleTextfield
+  //                   control={control}
+  //                   name="query"
+  //                   type="text"
+  //                   placeholder="What would you like to ask next?"
+  //                   required="Query is required."
+  //                   errors={errors}
+  //                 />
+  //               </div>
 
-  if (notesQueriesError) {
-    return (
-      <Popup
-        style={{
-          backgroundColor: "#061515",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: "12px",
-          padding: "1rem",
-          width: screenSize.width > 1024 ? "65%" : "90%",
-          height: `100%`,
-        }}
-        onClose={onClose}
-      >
-        <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
-          <div className="flex w-full justify-center p-1 sm:p-4">
-            <div className="text-xl sm:text-4xl font-bold">
-              Ask your notes a question!
-            </div>
-          </div>
-          <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
-            <h1>Error loading Query Notes Tool.</h1>
-          </div>
-        </div>
-      </Popup>
-    );
-  }
+  //               <button disabled={true}>
+  //                 <BsFillSendFill
+  //                   className={`text-3xl text-[#a56baf] cursor-not-allowed opacity-50`}
+  //                 />
+  //               </button>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </Popup>
+  //   );
+  // }
 
-  if (data.notesQueries && authorId) {
-    const messages = data.notesQueries.map((notesQuery: NotesQuery) => {
+  // if (notesQueriesError) {
+  //   return (
+  //     <Popup
+  //       style={{
+  //         backgroundColor: "#061515",
+  //         display: "flex",
+  //         flexDirection: "column",
+  //         alignItems: "center",
+  //         borderRadius: "12px",
+  //         padding: "1rem",
+  //         width: screenSize.width > 1024 ? "65%" : "90%",
+  //         height: `100%`,
+  //       }}
+  //       onClose={onClose}
+  //     >
+  //       <div className="flex flex-col w-full h-full rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 bg-main-light">
+  //         <div className="flex w-full justify-center p-1 sm:p-4">
+  //           <div className="text-xl sm:text-4xl font-bold">
+  //             Ask your notes a question!
+  //           </div>
+  //         </div>
+  //         <div className="flex w-full justify-center items-center h-full bg-main-dark text-main-dark rounded-lg p-8 overflow-auto">
+  //           <h1>Error loading Query Notes Tool.</h1>
+  //         </div>
+  //       </div>
+  //     </Popup>
+  //   );
+  // }
+  console.log("notesQueries: ", notesQueries);
+
+  if (notesQueries && authorId) {
+    const messages = notesQueries.map((notesQuery: NotesQuery) => {
       return {
         query: notesQuery.query,
         response: notesQuery.response,

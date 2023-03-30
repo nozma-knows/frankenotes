@@ -4,7 +4,7 @@ import { parse } from "cookie";
 // import { Tooltip } from "@mui/material";
 // import { BsFillChatRightFill } from "react-icons/bs";
 import { Note } from "@/__generated__/graphql";
-import { NotesQuery } from "@/components/graph";
+import { NotesQuery, NotesQueriesQuery } from "@/components/graph";
 import Page from "@/components/ui/pages/Page";
 import DecodeToken from "@/components/utils/conversion/DecodeToken";
 import useWindowSize, {
@@ -62,10 +62,6 @@ export default function Notepad({ token }: { token: string }) {
 
   const windowSize = useWindowSize();
 
-  useEffect(() => {
-    console.log("windowSize: ", windowSize);
-  }, [windowSize]);
-
   const [size, setSize] = useState("lg");
 
   useEffect(() => {
@@ -88,10 +84,50 @@ export default function Notepad({ token }: { token: string }) {
     }
   }, [fileManagerOpen, size, windowSize]);
 
-  // Grab notes from db
-  const { loading, error, data, refetch } = useQuery(NotesQuery, {
-    variables: { authorId },
-  });
+  // Function for grabbing notes and note queries from db
+  const useQueryNotesAndNotesQueries = () => {
+    const {
+      loading: loadingNotes,
+      error: errorLoadingNotes,
+      data: notesData,
+      refetch: refetchNotes,
+    } = useQuery(NotesQuery, {
+      variables: { authorId },
+    });
+    const {
+      loading: loadingNotesQueries,
+      error: errorLoadingNotesQueries,
+      data: notesQueriesData,
+      refetch: refetchNotesQueries,
+    } = useQuery(NotesQueriesQuery, {
+      variables: { authorId },
+    });
+    const loading = loadingNotes || loadingNotesQueries;
+    const error = errorLoadingNotes || errorLoadingNotesQueries;
+    return [
+      loading,
+      error,
+      notesData,
+      refetchNotes,
+      notesQueriesData,
+      refetchNotesQueries,
+    ];
+  };
+
+  // // Grab notes from db
+  // const { loading, error, data, refetch } = useQuery(NotesQuery, {
+  //   variables: { authorId },
+  // });
+
+  // grabnotes and note queries from db
+  const [
+    loading,
+    error,
+    notesData,
+    refetchNotes,
+    notesQueriesData,
+    refetchNotesQueries,
+  ] = useQueryNotesAndNotesQueries();
 
   // Loading view
   if (loading) {
@@ -104,7 +140,7 @@ export default function Notepad({ token }: { token: string }) {
   }
 
   // Loaded view
-  if (data && authorId) {
+  if (notesData && notesQueriesData && authorId) {
     return (
       <NoteContext.Provider
         value={{
@@ -112,10 +148,12 @@ export default function Notepad({ token }: { token: string }) {
           size,
           activeNote,
           setActiveNote,
-          notes: data.notes,
+          notes: notesData.notes,
           loadingNotes: loading,
           errorGrabbingNotes: error,
-          refetchNotes: refetch,
+          refetchNotes,
+          notesQueries: notesQueriesData.notesQueries,
+          refetchNotesQueries,
           fileManagerOpen,
           setFileManagerOpen,
           showFeedbackPopup,
