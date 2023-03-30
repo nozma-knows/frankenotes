@@ -171,6 +171,7 @@ export type Session = {
 
 export type UpdateNotesQueryInput = {
   response: Scalars['String'];
+  status: NotesQueryStatus;
 };
 
 export type User = {
