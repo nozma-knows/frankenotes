@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MouseEventHandler, useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Note } from "@/__generated__/graphql";
 import NoteContext from "../../context/useNoteContext";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot, LexicalEditor, CLEAR_EDITOR_COMMAND } from "lexical";
+import { $getRoot, CLEAR_EDITOR_COMMAND } from "lexical";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
 import { deleteVectorStore } from "../../utils/deleteVectorStore";

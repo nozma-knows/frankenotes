@@ -6,7 +6,7 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { CodeNode } from "@lexical/code";
 import TextEditor from "./ui/TextEditor";
-import FileManager from "./ui/FileManager";
+import FileManager from "./ui/file-manager";
 
 // Nodes available to editor
 const EDITOR_NODES = [
