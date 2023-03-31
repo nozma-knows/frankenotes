@@ -289,7 +289,7 @@ export default function FileManager() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full sm:max-w-[16rem] md:max-w-[21rem] max-h-72 sm:max-h-none">
+    <div className="flex flex-col w-full h-full sm:w-[16rem] md:w-[21rem] max-h-72 sm:max-h-none">
       <div className="hidden sm:flex justify-center p-2 pb-4">
         <Logo Icon={FrankenotesLogo} text={title} />
       </div>
