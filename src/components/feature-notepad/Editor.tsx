@@ -6,12 +6,9 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { CodeNode } from "@lexical/code";
 import TextEditor from "./ui/TextEditor";
-import FileManager from "./ui/FileManager";
+import FileManager from "./ui/file-manager";
 
-const theme = {
-  // Theme styling goes here
-};
-
+// Nodes available to editor
 const EDITOR_NODES = [
   AutoLinkNode,
   CodeNode,
@@ -21,21 +18,23 @@ const EDITOR_NODES = [
   ListItemNode,
   QuoteNode,
 ];
+
 export default function Editor() {
+  // Grab vars from context
   const { fileManagerOpen } = useContext(NoteContext);
 
+  // Editor error handler
+  // Note - Need to improve this
   function onError(error: Error) {
     console.error(error);
   }
 
+  // Initial config for editor
   const initialConfig = {
     namespace: "MyEditor",
-    theme,
     onError,
     nodes: EDITOR_NODES,
   };
-
-  const { activeNote } = useContext(NoteContext);
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
