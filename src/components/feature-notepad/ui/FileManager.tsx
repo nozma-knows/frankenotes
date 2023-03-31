@@ -1,11 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  MouseEventHandler,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from "react";
+import { MouseEventHandler, useState, useEffect, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CreateNoteMutation, DeleteNoteMutation } from "@/components/graph";
 import { Tooltip } from "@mui/material";
@@ -17,7 +11,6 @@ import {
   BsChevronDown,
   BsQuestionLg,
 } from "react-icons/bs";
-import { smScreenMax } from "@/components/utils/hooks/useWindowSize";
 import { Note } from "@/__generated__/graphql";
 import NoteContext from "../context/useNoteContext";
 import DropDown, { DropDownItem } from "@/components/ui/form-fields/DropDown";
@@ -26,6 +19,7 @@ import { $getRoot, LexicalEditor, CLEAR_EDITOR_COMMAND } from "lexical";
 import Logo from "@/components/ui/icons/Logo";
 import FrankenotesLogo from "@/icons/logo.svg";
 import QueryNotesPopup from "@/components/feature-ai/ui/popups/QueryNotesPopup";
+import { deleteVectorStore } from "../utils/deleteVectorStore";
 
 const title = `Frankenotes`;
 
@@ -228,30 +222,6 @@ export default function FileManager() {
     });
   };
 
-  const handleDeleteFromVectorStore = useCallback(
-    async ({ docId, doc }: { docId: string; doc: string }) => {
-      try {
-        if (doc) {
-          const response = await fetch(`../api/delete-from-vectore-store`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              docId,
-              doc,
-              authorId,
-            }),
-          });
-        }
-      } catch (error) {
-        console.error("Error submitting prompt: ", error);
-      }
-    },
-    [authorId]
-  );
-
   useEffect(() => {
     if (activeNote?.id) {
       editor.setEditorState(editor.parseEditorState(activeNote.editorState));
@@ -265,10 +235,9 @@ export default function FileManager() {
       editorState.read(() => {
         const root = $getRoot();
         const content = root.getTextContent();
-        handleDeleteFromVectorStore({
-          docId: data.deleteNote.id as string,
-          doc: content as string,
-        });
+        const docId = data.deleteNote.id as string;
+        const doc = content as string;
+        deleteVectorStore({ authorId, docId, doc });
       });
       refetchNotes();
       if (data.deleteNote.id === activeNote?.id) {
