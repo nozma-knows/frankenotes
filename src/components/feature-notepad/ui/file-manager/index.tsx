@@ -36,6 +36,8 @@ export default function FileManager() {
   useEffect(() => {
     if (activeNote?.id) {
       editor.setEditorState(editor.parseEditorState(activeNote.editorState));
+    } else {
+      editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
     }
   }, [activeNote?.id, editor]);
 
@@ -72,10 +74,14 @@ export default function FileManager() {
         deleteVectorStore({ authorId, docId, doc });
       });
       refetchNotes();
+      console.log("data.deleteNote.id: ", data.deleteNote.id);
+      console.log("activeNote?.id: ", activeNote?.id);
       if (data.deleteNote.id === activeNote?.id) {
+        console.log("HERE - setActiveNote: ", setActiveNote);
         setActiveNote(null);
+
+        console.log("activeNOTE - ", activeNote);
       }
-      editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
     },
     onError: () => console.log("error!"),
   });
