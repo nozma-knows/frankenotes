@@ -56,6 +56,7 @@ export default async function handler(
     );
 
     const model = new OpenAI({
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
       modelName: "gpt-3.5-turbo",
     });
     const chain = ChatVectorDBQAChain.fromLLM(model, vectorStore, {

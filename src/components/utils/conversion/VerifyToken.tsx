@@ -16,10 +16,10 @@ interface UserJwtPayload {
 }
 
 export const getJwtPrivateKey = () => {
-  const secret = process.env.JWT_PRIVATE_KEY;
+  const secret = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY;
   console.log("secret: ", secret);
   if (!secret || secret.length === 0) {
-    throw new Error("JWT_PRIVATE_KEY not set.");
+    throw new Error("NEXT_PUBLIC_JWT_PRIVATE_KEY not set.");
   }
   return secret;
 };
