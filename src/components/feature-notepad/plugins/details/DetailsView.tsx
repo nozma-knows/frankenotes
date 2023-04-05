@@ -27,11 +27,10 @@ export default function DetailsView() {
             name="title"
             value={title}
             placeholder="Untitled"
-            onChange={(e) => setTitle(e.target.value)}
-            onBlur={() =>
-              activeNote.title !== title &&
-              setActiveNote({ ...activeNote, title: title })
+            onChange={(e) =>
+              setActiveNote({ ...activeNote, title: e.target.value })
             }
+            onBlur={() => setActiveNote({ ...activeNote, title: title })}
           />
           <div className="flex gap-2 text-xl text-main-dark">
             <div className="font-bold">

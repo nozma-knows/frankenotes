@@ -17,6 +17,7 @@ interface UserJwtPayload {
 
 export const getJwtPrivateKey = () => {
   const secret = process.env.JWT_PRIVATE_KEY;
+  console.log("secret: ", secret);
 
   if (!secret || secret.length === 0) {
     throw new Error("JWT_PRIVATE_KEY not set.");
@@ -27,10 +28,12 @@ export const getJwtPrivateKey = () => {
 export default async function VerifyToken({ token }: VerifyTokenProps) {
   if (!token) throw new Error("No token provided.");
   try {
+    console.log("HERE");
     const verified = await jwtVerify(
       token,
       new TextEncoder().encode(getJwtPrivateKey())
     );
+    console.log("verified: ", verified);
     return verified.payload as UserJwtPayload;
   } catch (error) {
     throw new Error("Your token has expired.");

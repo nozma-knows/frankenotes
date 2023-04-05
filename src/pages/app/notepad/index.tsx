@@ -38,6 +38,10 @@ export default function Notepad({ token }: { token: string }) {
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
   const [fileManagerOpen, setFileManagerOpen] = useState(true);
 
+  useEffect(() => {
+    console.log("notepad - activeNote: ", activeNote);
+  }, [activeNote]);
+
   // Update size value when windowSize is updated
   // NOTE - This is a subpar solution, need to fix eventually
   useEffect(() => {
